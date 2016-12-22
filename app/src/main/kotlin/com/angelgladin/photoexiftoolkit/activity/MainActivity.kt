@@ -1,7 +1,8 @@
-package com.angelgladin.photoexiftoolkit
+package com.angelgladin.photoexiftoolkit.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.angelgladin.photoexiftoolkit.R
 
 class MainActivity : AppCompatActivity() {
 
