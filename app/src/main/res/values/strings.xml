@@ -1,3 +1,4 @@
 <resources>
   <string name="app_name">Photo EXIF Toolkit</string>
+  <string name="action_settings">Settings</string>
 </resources>
