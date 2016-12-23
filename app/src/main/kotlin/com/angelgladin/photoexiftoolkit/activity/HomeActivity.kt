@@ -86,12 +86,10 @@ class HomeActivity : AppCompatActivity(), HomeView {
   }
 
   override fun launchPhotoDetailActivity(list: ArrayList<ExifField>, availableLocation: Boolean) {
-    /*
     val intent = Intent(this, PhotoDetailActivity::class.java)
-    intent.putExtra("photo", list)
-    startActivity(intent)*/
-    System.out.println("Available location " + availableLocation)
-    System.out.println(list.toString())
+    intent.putExtra("list", list)
+    intent.putExtra("available_location", availableLocation)
+    startActivity(intent)
   }
 
   override fun showOnErrorDialog() {
