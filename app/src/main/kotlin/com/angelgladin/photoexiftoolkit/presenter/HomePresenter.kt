@@ -25,7 +25,7 @@ class HomePresenter(override val view: HomeView) : BasePresenter<BaseView> {
   fun getPhotoFromFilePicker() {
   }
 
-  fun launchPhotoDetailActivity(map: MutableMap<String, String>?) {
+  fun launchPhotoDetailActivity(pathFile: String, map: MutableMap<String, String>?) {
     val list: ArrayList<ExifField> = ArrayList()
 
     var lat: ExifField? = null
@@ -42,7 +42,7 @@ class HomePresenter(override val view: HomeView) : BasePresenter<BaseView> {
       }
     }
 
-    view.launchPhotoDetailActivity(list, (lat != null && lon != null))
+    view.launchPhotoDetailActivity(pathFile, list, (lat != null && lon != null))
   }
 
 }

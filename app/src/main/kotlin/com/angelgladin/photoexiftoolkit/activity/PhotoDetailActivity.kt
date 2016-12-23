@@ -1,43 +1,58 @@
 package com.angelgladin.photoexiftoolkit.activity
 
-import android.graphics.BitmapFactory
+import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
+import android.util.Log
 import android.view.Menu
 import com.angelgladin.photoexiftoolkit.R
+import com.angelgladin.photoexiftoolkit.domain.ExifField
+import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
+import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import kotlinx.android.synthetic.main.activity_photo_detail.*
+import java.util.*
 
-class PhotoDetailActivity : AppCompatActivity() {
+class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
-  val path = "/storage/emulated/0/DCIM/Camera/IMG_20161222_162439.jpg"
+  val presenter = PhotoDetailPresenter(this)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_photo_detail)
     setSupportActionBar(toolbar)
 
-    /*
-    val list = intent.getSerializableExtra("list") as ArrayList<ExifField>
-    System.out.println(list.toString())
-    val availableLocation = intent.getBooleanExtra("available_location");
-    */
-    toolbar_layout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
-    val bitmap = BitmapFactory.decodeFile(path)
-    image_photo.setImageBitmap(bitmap)
-
-    val palette = Palette.from(bitmap).generate()
-    // Pick one of the swatches
-    val vibrant = palette.dominantSwatch;
-    if (vibrant != null) {
-      toolbar_layout.setContentScrimColor(vibrant.rgb)
-    }
-
-
+    presenter.getDataFromIntent(intent)
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.menu_photo_detail, menu)
     return super.onCreateOptionsMenu(menu)
+  }
+
+  override fun getContext(): Context = this
+
+  override fun destroy() {
+  }
+
+  override fun setImageData(fileName: String, fileSize: String) {
+    Log.e("AAAAA", "file name: " + fileName)
+    Log.e("AAAAA", "file size: " + fileSize)
+  }
+
+  override fun setExifFieldsList(list: ArrayList<ExifField>) {
+    Log.e("AAAAA", list.toString())
+  }
+
+  override fun setupUI(bitmap: Bitmap) {
+    toolbar_layout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
+
+    image_photo.setImageBitmap(bitmap)
+    val palette = Palette.from(bitmap).generate()
+    val vibrant = palette.dominantSwatch;
+    if (vibrant != null) {
+      toolbar_layout.setContentScrimColor(vibrant.rgb)
+    }
   }
 }

@@ -42,10 +42,10 @@ class HomeActivity : AppCompatActivity(), HomeView {
         && data != null && data.data != null) {
       val selectedImage = data.data
 
-      val path = selectedImage.getPathFromUri(this)
-      val exifInterface = ExifInterface(path)
+      val pathFile = selectedImage.getPathFromUri(this)
+      val exifInterface = ExifInterface(pathFile)
 
-      presenter.launchPhotoDetailActivity(exifInterface.getMap())
+      presenter.launchPhotoDetailActivity(pathFile!!, exifInterface.getMap())
     }
   }
 
@@ -85,8 +85,10 @@ class HomeActivity : AppCompatActivity(), HomeView {
   override fun showAboutAppDialog() {
   }
 
-  override fun launchPhotoDetailActivity(list: ArrayList<ExifField>, availableLocation: Boolean) {
+  override fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
+      availableLocation: Boolean) {
     val intent = Intent(this, PhotoDetailActivity::class.java)
+    intent.putExtra("path_file", pathFile)
     intent.putExtra("list", list)
     intent.putExtra("available_location", availableLocation)
     startActivity(intent)

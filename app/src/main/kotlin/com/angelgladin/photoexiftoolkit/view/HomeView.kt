@@ -13,6 +13,7 @@ interface HomeView : BaseView {
   fun openFilePicker()
   fun showAboutDeveloperDialog()
   fun showAboutAppDialog()
-  fun launchPhotoDetailActivity(list: ArrayList<ExifField>, availableLocation: Boolean)
+  fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
+      availableLocation: Boolean)
   fun showOnErrorDialog()
 }
