@@ -2,11 +2,13 @@ package com.angelgladin.photoexiftoolkit.activity
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.util.Log
 import android.view.Menu
+import android.view.WindowManager
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.domain.ExifField
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
@@ -37,8 +39,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
   }
 
   override fun setImageData(fileName: String, fileSize: String) {
-    Log.e("AAAAA", "file name: " + fileName)
-    Log.e("AAAAA", "file size: " + fileSize)
+    text_image_info.text = "$fileName\n$fileSize"
   }
 
   override fun setExifFieldsList(list: ArrayList<ExifField>) {
@@ -49,10 +50,22 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
     toolbar_layout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
 
     image_photo.setImageBitmap(bitmap)
-    val palette = Palette.from(bitmap).generate()
-    val vibrant = palette.dominantSwatch;
-    if (vibrant != null) {
-      toolbar_layout.setContentScrimColor(vibrant.rgb)
+
+    val palette: Palette? = Palette.from(bitmap).generate()
+    val vibrantPalette = palette?.vibrantSwatch
+    val darkVibrantPalette = palette?.darkVibrantSwatch
+
+    if (vibrantPalette != null) {
+      toolbar_layout.setContentScrimColor(vibrantPalette.rgb)
+    }
+
+    if (darkVibrantPalette != null) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        val window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = darkVibrantPalette.rgb
+      }
     }
   }
+
 }

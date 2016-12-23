@@ -12,7 +12,7 @@
   <android.support.design.widget.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="380dp"
+      android:layout_height="420dp"
       android:fitsSystemWindows="true"
       android:theme="@style/AppTheme.AppBarOverlay"
       >
@@ -45,7 +45,7 @@
             android:id="@+id/container_text_image_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#80FFFFFF"
+            android:background="#80000000"
             >
 
           <TextView
