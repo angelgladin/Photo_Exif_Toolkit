@@ -2,15 +2,20 @@ package com.angelgladin.photoexiftoolkit.activity
 
 import android.content.Context
 import android.content.Intent
+import android.media.ExifInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.angelgladin.photoexiftoolkit.R
+import com.angelgladin.photoexiftoolkit.domain.ExifField
+import com.angelgladin.photoexiftoolkit.extension.getMap
+import com.angelgladin.photoexiftoolkit.extension.getPathFromUri
 import com.angelgladin.photoexiftoolkit.presenter.HomePresenter
 import com.angelgladin.photoexiftoolkit.view.HomeView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
+import java.util.*
 
 class HomeActivity : AppCompatActivity(), HomeView {
 
@@ -35,9 +40,12 @@ class HomeActivity : AppCompatActivity(), HomeView {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
         && data != null && data.data != null) {
-      val selectedImage = data.data;
+      val selectedImage = data.data
 
+      val path = selectedImage.getPathFromUri(this)
+      val exifInterface = ExifInterface(path)
 
+      presenter.launchPhotoDetailActivity(exifInterface.getMap())
     }
   }
 
@@ -75,6 +83,15 @@ class HomeActivity : AppCompatActivity(), HomeView {
   }
 
   override fun showAboutAppDialog() {
+  }
+
+  override fun launchPhotoDetailActivity(list: ArrayList<ExifField>, availableLocation: Boolean) {
+    /*
+    val intent = Intent(this, PhotoDetailActivity::class.java)
+    intent.putExtra("photo", list)
+    startActivity(intent)*/
+    System.out.println("Available location " + availableLocation)
+    System.out.println(list.toString())
   }
 
   override fun showOnErrorDialog() {
