@@ -5,7 +5,9 @@ import android.graphics.BitmapFactory
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.domain.ExifField
+import com.angelgladin.photoexiftoolkit.extension.getSize
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
+import java.io.File
 import java.util.*
 
 /**
@@ -22,7 +24,9 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     val bitmap = BitmapFactory.decodeFile(filePath)
     view.setupUI(bitmap)
-    view.setImageData("FileName","FileSize")
+
+    val file = File(filePath)
+    view.setImageData(file.name, file.getSize())
     view.setExifFieldsList(list)
   }
 
