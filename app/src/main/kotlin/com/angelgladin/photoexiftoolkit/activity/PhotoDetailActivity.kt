@@ -2,6 +2,7 @@ package com.angelgladin.photoexiftoolkit.activity
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.domain.ExifField
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_photo_detail.*
 import java.util.*
 
@@ -38,8 +40,9 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
   override fun destroy() {
   }
 
-  override fun setImageData(fileName: String, fileSize: String) {
+  override fun setImage(fileName: String, fileSize: String, imageUri: Uri) {
     text_image_info.text = "$fileName\n$fileSize"
+    Glide.with(this).load(imageUri).into(image_photo)
   }
 
   override fun setExifFieldsList(list: ArrayList<ExifField>) {

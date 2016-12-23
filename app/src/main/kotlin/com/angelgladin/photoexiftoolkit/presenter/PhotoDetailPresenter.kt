@@ -2,6 +2,7 @@ package com.angelgladin.photoexiftoolkit.presenter
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.domain.ExifField
@@ -21,12 +22,14 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
   fun getDataFromIntent(intent: Intent) {
     val filePath = intent.getStringExtra("path_file")
     val list = intent.getSerializableExtra("list") as ArrayList<ExifField>
+    //Log.e("PATH", filePath)
 
     val bitmap = BitmapFactory.decodeFile(filePath)
     view.setupUI(bitmap)
 
+    val imageUri = Uri.fromFile(File(filePath))
     val file = File(filePath)
-    view.setImageData(file.name, file.getSize())
+    view.setImage(file.name, file.getSize(), imageUri)
     view.setExifFieldsList(list)
   }
 
