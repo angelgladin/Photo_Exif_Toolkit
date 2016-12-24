@@ -1,6 +1,7 @@
 package com.angelgladin.photoexiftoolkit.extension
 
 import android.media.ExifInterface
+import com.angelgladin.photoexiftoolkit.util.Constants
 
 /**
  * Created on 12/22/16.
@@ -14,8 +15,8 @@ fun ExifInterface.getMap(): MutableMap<String, String>? {
 
   val latLonArray = FloatArray(2)
   if (this.getLatLong(latLonArray)) {
-    map["Latitude"] = latLonArray[0].toString()
-    map["Longitude"] = latLonArray[1].toString()
+    map[Constants.EXIF_LATITUDE] = latLonArray[0].toString()
+    map[Constants.EXIF_LONGITUDE] = latLonArray[1].toString()
   }
 
   return map
