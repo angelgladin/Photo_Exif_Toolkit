@@ -28,7 +28,7 @@ class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>) : RecyclerView.Ad
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: ExifTagsContainer) = with(itemView) {
-      text.text = item.list.toString()
+      text.text = item.getOnStringProperties()
       when (item.type) {
         Type.LOCATION_DATA -> image_type.setImageResource(R.mipmap.ic_launcher)
         Type.CAMERA_PROPERTIES -> image_type.setImageResource(R.mipmap.ic_launcher)
