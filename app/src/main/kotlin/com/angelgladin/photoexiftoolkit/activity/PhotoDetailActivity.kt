@@ -13,13 +13,12 @@ import android.view.Menu
 import android.view.WindowManager
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
-import com.angelgladin.photoexiftoolkit.domain.ExifField
+import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_photo_detail.*
 import kotlinx.android.synthetic.main.content_photo_detail.*
-import java.util.*
 
 class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
@@ -49,7 +48,8 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
     Glide.with(this).load(imageUri).into(image_photo)
   }
 
-  override fun setExifFieldsList(list: ArrayList<ExifField>) {
+  override fun setExifDataList(
+      list: List<ExifTagsContainer>) {
     Log.e("AAAAA", list.toString())
 
     recycler_view.setHasFixedSize(true)

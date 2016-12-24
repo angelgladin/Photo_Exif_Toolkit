@@ -4,10 +4,11 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.ExifInterface
 import android.net.Uri
-import android.util.Log
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.domain.ExifField
+import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
+import com.angelgladin.photoexiftoolkit.domain.Type
 import com.angelgladin.photoexiftoolkit.extension.getSize
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
@@ -27,18 +28,16 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     val list = intent.getSerializableExtra("list") as ArrayList<ExifField>
     //Log.e("PATH", filePath)
 
-    test(list)
-
     val bitmap = BitmapFactory.decodeFile(filePath)
     view.setupUI(bitmap)
 
     val imageUri = Uri.fromFile(File(filePath))
     val file = File(filePath)
     view.setImage(file.name, file.getSize(), imageUri)
-    view.setExifFieldsList(list)
+    view.setExifDataList(transformList(list))
   }
 
-  private fun test(list: ArrayList<ExifField>) {
+  private fun transformList(list: ArrayList<ExifField>): List<ExifTagsContainer> {
     val locationsList = arrayListOf<ExifField>()
     val datesList = arrayListOf<ExifField>()
     val cameraPropertiesList = arrayListOf<ExifField>()
@@ -71,6 +70,12 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         else -> othersList.add(it)
       }
     }
+
+    return arrayListOf(ExifTagsContainer(locationsList, Type.LOCATION_DATA),
+        ExifTagsContainer(datesList, Type.DATE),
+        ExifTagsContainer(cameraPropertiesList, Type.CAMERA_PROPERTIES),
+        ExifTagsContainer(dimensionsList, Type.DIMENSION),
+        ExifTagsContainer(othersList, Type.OTHER))
   }
 
 }
