@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import android.widget.Toast
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
+import com.angelgladin.photoexiftoolkit.domain.Type
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import com.bumptech.glide.Glide
@@ -83,6 +85,17 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
   }
 
   override fun showDialog(item: ExifTagsContainer) {
-    Toast.makeText(this, item.toString(), Toast.LENGTH_SHORT).show()
+    val alertDialogBuilder = AlertDialog.Builder(this)
+    val optionsList = mutableListOf("Copy to clipboard", "Edit")
+    when (item.type) {
+      Type.LOCATION_DATA -> optionsList.add("Open map")
+      Type.DIMENSION -> optionsList.remove("Edit")
+    }
+    alertDialogBuilder.setTitle("Select an action")
+    alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
+      Toast.makeText(this@PhotoDetailActivity, item.toString(), Toast.LENGTH_SHORT).show()
+    })
+    val dialog = alertDialogBuilder.create()
+    dialog.show()
   }
 }
