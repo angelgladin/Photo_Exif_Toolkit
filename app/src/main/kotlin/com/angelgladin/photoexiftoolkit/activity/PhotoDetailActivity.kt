@@ -1,5 +1,7 @@
 package com.angelgladin.photoexiftoolkit.activity
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -22,6 +24,7 @@ import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_photo_detail.*
 import kotlinx.android.synthetic.main.content_photo_detail.*
+
 
 class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
@@ -93,7 +96,24 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
     }
     alertDialogBuilder.setTitle("Select an action")
     alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
-      Toast.makeText(this@PhotoDetailActivity, item.toString(), Toast.LENGTH_SHORT).show()
+      when (which) {
+        0 -> {
+          val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+          val clip = ClipData.newPlainText(item.type.name, item.getOnStringProperties())
+          clipboard.primaryClip = clip
+
+          Toast.makeText(this@PhotoDetailActivity, "Text successfully copied to clipboard",
+              Toast.LENGTH_SHORT).show()
+        }
+        1 -> {
+          Toast.makeText(this@PhotoDetailActivity, "Not implemented yet :p",
+              Toast.LENGTH_SHORT).show()
+        }
+        2 -> {
+          Toast.makeText(this@PhotoDetailActivity, "Map not implemented yet",
+              Toast.LENGTH_SHORT).show()
+        }
+      }
     })
     val dialog = alertDialogBuilder.create()
     dialog.show()
