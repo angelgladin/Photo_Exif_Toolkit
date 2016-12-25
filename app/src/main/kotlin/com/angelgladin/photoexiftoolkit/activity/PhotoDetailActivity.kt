@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
+import android.widget.Toast
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
@@ -55,7 +56,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
     recycler_view.setHasFixedSize(true)
     val mLayoutManager = LinearLayoutManager(this)
     recycler_view.layoutManager = mLayoutManager
-    val mAdapter = ExifFieldsAdapter(list)
+    val mAdapter = ExifFieldsAdapter(list, presenter)
     recycler_view.adapter = mAdapter
   }
 
@@ -81,4 +82,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
     }
   }
 
+  override fun showDialog(item: ExifTagsContainer) {
+    Toast.makeText(this, item.toString(), Toast.LENGTH_SHORT).show()
+  }
 }

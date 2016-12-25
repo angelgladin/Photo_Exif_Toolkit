@@ -78,4 +78,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         ExifTagsContainer(othersList, Type.OTHER))
   }
 
+  fun pressedItem(item: ExifTagsContainer){
+    view.showDialog(item)
+  }
 }

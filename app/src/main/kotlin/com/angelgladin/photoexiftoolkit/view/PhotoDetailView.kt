@@ -10,7 +10,8 @@ import java.util.*
  * Created on 12/22/16.
  */
 interface PhotoDetailView : BaseView {
+  fun setupUI(bitmap: Bitmap)
   fun setImage(fileName: String, fileSize: String, imageUri: Uri)
   fun setExifDataList(list: List<ExifTagsContainer>)
-  fun setupUI(bitmap: Bitmap)
+  fun showDialog(item: ExifTagsContainer)
 }
