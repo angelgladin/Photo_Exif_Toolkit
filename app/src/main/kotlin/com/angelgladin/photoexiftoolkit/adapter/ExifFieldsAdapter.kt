@@ -30,14 +30,29 @@ class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: Ph
 
     fun bind(item: ExifTagsContainer,
         presenter: PhotoDetailPresenter) = with(itemView) {
-      text.text = item.getOnStringProperties()
+      text_properties.text = item.getOnStringProperties()
       itemView.setOnClickListener { presenter.pressedItem(item) }
       when (item.type) {
-        Type.LOCATION_DATA -> image_type.setImageResource(R.mipmap.ic_launcher)
-        Type.CAMERA_PROPERTIES -> image_type.setImageResource(R.mipmap.ic_launcher)
-        Type.DATE -> image_type.setImageResource(R.mipmap.ic_launcher)
-        Type.DIMENSION -> image_type.setImageResource(R.mipmap.ic_launcher)
-        Type.OTHER -> image_type.setImageResource(R.mipmap.ic_launcher)
+        Type.LOCATION_DATA -> {
+          image_type.setImageResource(R.mipmap.ic_launcher)
+          text_type.text = Type.LOCATION_DATA.name
+        }
+        Type.CAMERA_PROPERTIES -> {
+          image_type.setImageResource(R.mipmap.ic_launcher)
+          text_type.text = Type.CAMERA_PROPERTIES.name
+        }
+        Type.DATE -> {
+          image_type.setImageResource(R.mipmap.ic_launcher)
+          text_type.text = Type.DATE.name
+        }
+        Type.DIMENSION -> {
+          image_type.setImageResource(R.mipmap.ic_launcher)
+          text_type.text = Type.DIMENSION.name
+        }
+        Type.OTHER -> {
+          image_type.setImageResource(R.mipmap.ic_launcher)
+          text_type.text = Type.OTHER.name
+        }
       }
     }
   }
