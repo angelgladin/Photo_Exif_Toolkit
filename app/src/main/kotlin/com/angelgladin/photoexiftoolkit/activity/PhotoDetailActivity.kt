@@ -21,6 +21,7 @@ import com.angelgladin.photoexiftoolkit.dialog.MapDialog
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.domain.Type
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
+import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_photo_detail.*
@@ -111,8 +112,11 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
               Toast.LENGTH_SHORT).show()
         }
         2 -> {
+          val lat = item.list.find { it.tag == Constants.EXIF_LATITUDE }?.attribute?.toDouble()
+          val lng = item.list.find { it.tag == Constants.EXIF_LONGITUDE }?.attribute?.toDouble()
+
           val fm = supportFragmentManager
-          val editNameDialogFragment = MapDialog()
+          val editNameDialogFragment = MapDialog.newInstance(lat ?: 0.0, lng ?: 0.0)
           editNameDialogFragment.show(fm, "maps")
         }
       }
