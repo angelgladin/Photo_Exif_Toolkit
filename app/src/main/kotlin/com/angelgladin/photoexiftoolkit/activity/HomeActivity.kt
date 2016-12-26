@@ -19,81 +19,81 @@ import java.util.*
 
 class HomeActivity : AppCompatActivity(), HomeView {
 
-  val PICK_IMAGE_REQUEST = 666
+    val PICK_IMAGE_REQUEST = 666
 
-  val presenter = HomePresenter(this)
+    val presenter = HomePresenter(this)
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_home)
-    setSupportActionBar(toolbar)
-    setupOnClickListeners()
-  }
-
-  private fun setupOnClickListeners() {
-    button_from_gallery.setOnClickListener { presenter.getPhotoFromGallery() }
-    button_from_url.setOnClickListener { presenter.getPhotoFromUrl() }
-    button_file_picker.setOnClickListener { presenter.getPhotoFromFilePicker() }
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-        && data != null && data.data != null) {
-      val selectedImage = data.data
-
-      val pathFile = selectedImage.getPathFromUri(this)
-      val exifInterface = ExifInterface(pathFile)
-
-      presenter.launchPhotoDetailActivity(pathFile!!, exifInterface.getMap())
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_home)
+        setSupportActionBar(toolbar)
+        setupOnClickListeners()
     }
-  }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_main, menu)
-    return true
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.action_about_developer -> presenter.aboutDeveloper()
-      R.id.action_about_app -> presenter.aboutApp()
+    private fun setupOnClickListeners() {
+        button_from_gallery.setOnClickListener { presenter.getPhotoFromGallery() }
+        button_from_url.setOnClickListener { presenter.getPhotoFromUrl() }
+        button_file_picker.setOnClickListener { presenter.getPhotoFromFilePicker() }
     }
-    return super.onOptionsItemSelected(item)
-  }
 
-  override fun getContext(): Context = this
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.data != null) {
+            val selectedImage = data.data
 
-  override fun destroy() {
-  }
+            val pathFile = selectedImage.getPathFromUri(this)
+            val exifInterface = ExifInterface(pathFile)
 
-  override fun openGallery() {
-    val photoPickerIntent = Intent(Intent.ACTION_PICK)
-    photoPickerIntent.type = "image/*"
-    startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST)
-  }
+            presenter.launchPhotoDetailActivity(pathFile!!, exifInterface.getMap())
+        }
+    }
 
-  override fun openUrlDialog() {
-  }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
 
-  override fun openFilePicker() {
-  }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_about_developer -> presenter.aboutDeveloper()
+            R.id.action_about_app -> presenter.aboutApp()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
-  override fun showAboutDeveloperDialog() {
-  }
+    override fun getContext(): Context = this
 
-  override fun showAboutAppDialog() {
-  }
+    override fun destroy() {
+    }
 
-  override fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
-      availableLocation: Boolean) {
-    val intent = Intent(this, PhotoDetailActivity::class.java)
-    intent.putExtra("path_file", pathFile)
-    intent.putExtra("list", list)
-    intent.putExtra("available_location", availableLocation)
-    startActivity(intent)
-  }
+    override fun openGallery() {
+        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+        photoPickerIntent.type = "image/*"
+        startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST)
+    }
 
-  override fun showOnErrorDialog() {
-  }
+    override fun openUrlDialog() {
+    }
+
+    override fun openFilePicker() {
+    }
+
+    override fun showAboutDeveloperDialog() {
+    }
+
+    override fun showAboutAppDialog() {
+    }
+
+    override fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
+                                           availableLocation: Boolean) {
+        val intent = Intent(this, PhotoDetailActivity::class.java)
+        intent.putExtra("path_file", pathFile)
+        intent.putExtra("list", list)
+        intent.putExtra("available_location", availableLocation)
+        startActivity(intent)
+    }
+
+    override fun showOnErrorDialog() {
+    }
 }

@@ -19,72 +19,72 @@ import com.google.android.gms.maps.model.MarkerOptions
  */
 class MapDialog : DialogFragment(), OnMapReadyCallback, Toolbar.OnMenuItemClickListener {
 
-  var mMap: GoogleMap? = null
+    var mMap: GoogleMap? = null
 
-  companion object {
-    fun newInstance(latitude: Double, longitude: Double): MapDialog {
-      val frag = MapDialog()
-      val bundle = Bundle()
-      bundle.putDouble(Constants.EXIF_LATITUDE, latitude)
-      bundle.putDouble(Constants.EXIF_LONGITUDE, longitude)
-      frag.arguments = bundle
-      return frag
+    companion object {
+        fun newInstance(latitude: Double, longitude: Double): MapDialog {
+            val frag = MapDialog()
+            val bundle = Bundle()
+            bundle.putDouble(Constants.EXIF_LATITUDE, latitude)
+            bundle.putDouble(Constants.EXIF_LONGITUDE, longitude)
+            frag.arguments = bundle
+            return frag
+        }
     }
-  }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.dialog_maps, container, false)
-    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.dialog_maps, container, false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-    val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-    toolbar.inflateMenu(R.menu.menu_dialog_maps)
-    toolbar.setOnMenuItemClickListener(this)
-    toolbar.setNavigationIcon(android.R.drawable.ic_media_play)
-    toolbar.setNavigationOnClickListener { dismiss() }
-    toolbar.title = "Location"
+        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        toolbar.inflateMenu(R.menu.menu_dialog_maps)
+        toolbar.setOnMenuItemClickListener(this)
+        toolbar.setNavigationIcon(android.R.drawable.ic_media_play)
+        toolbar.setNavigationOnClickListener { dismiss() }
+        toolbar.title = "Location"
 
-    return view
-  }
-
-  override fun onResume() {
-    super.onResume()
-    val mapFragment = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-    mapFragment.getMapAsync(this)
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    val f = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-    if (f != null) fragmentManager.beginTransaction().remove(f).commit()
-  }
-
-  override fun onMenuItemClick(item: MenuItem): Boolean = when (item.itemId) {
-    R.id.action_edit_location -> {
-      editLocation()
-      true
+        return view
     }
-    else -> false
-  }
 
-  override fun onMapReady(googleMap: GoogleMap) {
-    mMap = googleMap
-    mMap!!.uiSettings.isZoomControlsEnabled = true
+    override fun onResume() {
+        super.onResume()
+        val mapFragment = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
 
-    val location = LatLng(arguments.getDouble(Constants.EXIF_LATITUDE),
-        arguments.getDouble(Constants.EXIF_LONGITUDE))
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val f = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        if (f != null) fragmentManager.beginTransaction().remove(f).commit()
+    }
 
-    mMap!!.isMyLocationEnabled = true
-    mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.8f))
+    override fun onMenuItemClick(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_edit_location -> {
+            editLocation()
+            true
+        }
+        else -> false
+    }
 
-    mMap!!.addMarker(MarkerOptions()
-        .title("TODO")
-        .snippet("TODO")
-        .position(location))
-  }
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap!!.uiSettings.isZoomControlsEnabled = true
 
-  private fun editLocation() {
-    Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
-  }
+        val location = LatLng(arguments.getDouble(Constants.EXIF_LATITUDE),
+                arguments.getDouble(Constants.EXIF_LONGITUDE))
+
+        mMap!!.isMyLocationEnabled = true
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.8f))
+
+        mMap!!.addMarker(MarkerOptions()
+                .title("TODO")
+                .snippet("TODO")
+                .position(location))
+    }
+
+    private fun editLocation() {
+        Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
+    }
 
 }

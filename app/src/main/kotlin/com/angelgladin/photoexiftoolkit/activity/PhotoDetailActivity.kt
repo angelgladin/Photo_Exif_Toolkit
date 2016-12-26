@@ -30,98 +30,98 @@ import kotlinx.android.synthetic.main.content_photo_detail.*
 
 class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
-  val presenter = PhotoDetailPresenter(this)
+    val presenter = PhotoDetailPresenter(this)
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_photo_detail)
-    setSupportActionBar(toolbar)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_photo_detail)
+        setSupportActionBar(toolbar)
 
-    presenter.getDataFromIntent(intent)
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.menu_photo_detail, menu)
-
-    return super.onCreateOptionsMenu(menu)
-  }
-
-  override fun getContext(): Context = this
-
-  override fun destroy() {
-  }
-
-  override fun setImage(fileName: String, fileSize: String, imageUri: Uri) {
-    text_image_info.text = "$fileName\n$fileSize"
-    Glide.with(this).load(imageUri).into(image_photo)
-  }
-
-  override fun setExifDataList(
-      list: List<ExifTagsContainer>) {
-    Log.e("AAAAA", list.toString())
-
-    recycler_view.setHasFixedSize(true)
-    val mLayoutManager = LinearLayoutManager(this)
-    recycler_view.layoutManager = mLayoutManager
-    val mAdapter = ExifFieldsAdapter(list, presenter)
-    recycler_view.adapter = mAdapter
-  }
-
-  override fun setupUI(bitmap: Bitmap) {
-    toolbar_layout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
-
-    image_photo.setImageBitmap(bitmap)
-
-    val palette: Palette? = Palette.from(bitmap).generate()
-    val vibrantPalette = palette?.vibrantSwatch
-    val darkVibrantPalette = palette?.darkVibrantSwatch
-
-    if (vibrantPalette != null) {
-      toolbar_layout.setContentScrimColor(vibrantPalette.rgb)
+        presenter.getDataFromIntent(intent)
     }
 
-    if (darkVibrantPalette != null) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        val window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = darkVibrantPalette.rgb
-      }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_photo_detail, menu)
+
+        return super.onCreateOptionsMenu(menu)
     }
-  }
 
-  override fun showDialog(item: ExifTagsContainer) {
-    val alertDialogBuilder = AlertDialog.Builder(this)
-    val optionsList = mutableListOf("Copy to clipboard", "Edit")
-    when (item.type) {
-      Type.LOCATION_DATA -> optionsList.add("Open map")
-      Type.DIMENSION -> optionsList.remove("Edit")
+    override fun getContext(): Context = this
+
+    override fun destroy() {
     }
-    alertDialogBuilder.setTitle("Select an action")
-    alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
-      when (which) {
-        0 -> {
-          val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-          val clip = ClipData.newPlainText(item.type.name, item.getOnStringProperties())
-          clipboard.primaryClip = clip
 
-          Toast.makeText(this@PhotoDetailActivity, "Text successfully copied to clipboard",
-              Toast.LENGTH_SHORT).show()
-        }
-        1 -> {
-          Toast.makeText(this@PhotoDetailActivity, "Not implemented yet :p",
-              Toast.LENGTH_SHORT).show()
-        }
-        2 -> {
-          val lat = item.list.find { it.tag == Constants.EXIF_LATITUDE }?.attribute?.toDouble()
-          val lng = item.list.find { it.tag == Constants.EXIF_LONGITUDE }?.attribute?.toDouble()
+    override fun setImage(fileName: String, fileSize: String, imageUri: Uri) {
+        text_image_info.text = "$fileName\n$fileSize"
+        Glide.with(this).load(imageUri).into(image_photo)
+    }
 
-          val fm = supportFragmentManager
-          val editNameDialogFragment = MapDialog.newInstance(lat ?: 0.0, lng ?: 0.0)
-          editNameDialogFragment.show(fm, "maps")
+    override fun setExifDataList(
+            list: List<ExifTagsContainer>) {
+        Log.e("AAAAA", list.toString())
+
+        recycler_view.setHasFixedSize(true)
+        val mLayoutManager = LinearLayoutManager(this)
+        recycler_view.layoutManager = mLayoutManager
+        val mAdapter = ExifFieldsAdapter(list, presenter)
+        recycler_view.adapter = mAdapter
+    }
+
+    override fun setupUI(bitmap: Bitmap) {
+        toolbar_layout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
+
+        image_photo.setImageBitmap(bitmap)
+
+        val palette: Palette? = Palette.from(bitmap).generate()
+        val vibrantPalette = palette?.vibrantSwatch
+        val darkVibrantPalette = palette?.darkVibrantSwatch
+
+        if (vibrantPalette != null) {
+            toolbar_layout.setContentScrimColor(vibrantPalette.rgb)
         }
-      }
-    })
-    val dialog = alertDialogBuilder.create()
-    dialog.show()
-  }
+
+        if (darkVibrantPalette != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val window = window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.statusBarColor = darkVibrantPalette.rgb
+            }
+        }
+    }
+
+    override fun showDialog(item: ExifTagsContainer) {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        val optionsList = mutableListOf("Copy to clipboard", "Edit")
+        when (item.type) {
+            Type.LOCATION_DATA -> optionsList.add("Open map")
+            Type.DIMENSION -> optionsList.remove("Edit")
+        }
+        alertDialogBuilder.setTitle("Select an action")
+        alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
+            when (which) {
+                0 -> {
+                    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText(item.type.name, item.getOnStringProperties())
+                    clipboard.primaryClip = clip
+
+                    Toast.makeText(this@PhotoDetailActivity, "Text successfully copied to clipboard",
+                            Toast.LENGTH_SHORT).show()
+                }
+                1 -> {
+                    Toast.makeText(this@PhotoDetailActivity, "Not implemented yet :p",
+                            Toast.LENGTH_SHORT).show()
+                }
+                2 -> {
+                    val lat = item.list.find { it.tag == Constants.EXIF_LATITUDE }?.attribute?.toDouble()
+                    val lng = item.list.find { it.tag == Constants.EXIF_LONGITUDE }?.attribute?.toDouble()
+
+                    val fm = supportFragmentManager
+                    val editNameDialogFragment = MapDialog.newInstance(lat ?: 0.0, lng ?: 0.0)
+                    editNameDialogFragment.show(fm, "maps")
+                }
+            }
+        })
+        val dialog = alertDialogBuilder.create()
+        dialog.show()
+    }
 }

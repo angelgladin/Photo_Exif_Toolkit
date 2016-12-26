@@ -6,6 +6,6 @@ import android.content.Context
  * Created on 12/22/16.
  */
 interface BaseView {
-  fun destroy()
-  fun getContext(): Context
+    fun destroy()
+    fun getContext(): Context
 }

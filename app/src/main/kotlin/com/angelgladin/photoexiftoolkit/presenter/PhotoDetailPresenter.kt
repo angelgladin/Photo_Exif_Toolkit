@@ -20,65 +20,65 @@ import java.util.*
  */
 class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<BaseView> {
 
-  override fun initialize() {
-  }
-
-  fun getDataFromIntent(intent: Intent) {
-    val filePath = intent.getStringExtra("path_file")
-    val list = intent.getSerializableExtra("list") as ArrayList<ExifField>
-    //Log.e("PATH", filePath)
-
-    val bitmap = BitmapFactory.decodeFile(filePath)
-    view.setupUI(bitmap)
-
-    val imageUri = Uri.fromFile(File(filePath))
-    val file = File(filePath)
-    view.setImage(file.name, file.getSize(), imageUri)
-    view.setExifDataList(transformList(list))
-  }
-
-  private fun transformList(list: ArrayList<ExifField>): List<ExifTagsContainer> {
-    val locationsList = arrayListOf<ExifField>()
-    val datesList = arrayListOf<ExifField>()
-    val cameraPropertiesList = arrayListOf<ExifField>()
-    val dimensionsList = arrayListOf<ExifField>()
-    val othersList = arrayListOf<ExifField>()
-
-    list.forEach {
-      when {
-        it.tag == Constants.EXIF_LATITUDE -> locationsList.add(it)
-        it.tag == Constants.EXIF_LONGITUDE -> locationsList.add(it)
-        it.tag == ExifInterface.TAG_GPS_LATITUDE -> locationsList.add(it)
-        it.tag == ExifInterface.TAG_GPS_LATITUDE_REF -> locationsList.add(it)
-        it.tag == ExifInterface.TAG_GPS_LATITUDE -> locationsList.add(it)
-        it.tag == ExifInterface.TAG_GPS_LONGITUDE_REF -> locationsList.add(it)
-
-        it.tag == ExifInterface.TAG_DATETIME -> datesList.add(it)
-        it.tag == ExifInterface.TAG_GPS_DATESTAMP -> datesList.add(it)
-        it.tag == ExifInterface.TAG_DATETIME_DIGITIZED -> datesList.add(it)
-
-        it.tag == ExifInterface.TAG_MAKE -> cameraPropertiesList.add(it)
-        it.tag == ExifInterface.TAG_MODEL -> cameraPropertiesList.add(it)
-        it.tag == ExifInterface.TAG_F_NUMBER -> cameraPropertiesList.add(it)
-        it.tag == ExifInterface.TAG_EXPOSURE_TIME -> cameraPropertiesList.add(it)
-        it.tag == ExifInterface.TAG_ISO_SPEED_RATINGS -> cameraPropertiesList.add(it)
-        it.tag == ExifInterface.TAG_FLASH -> cameraPropertiesList.add(it)
-
-        it.tag == ExifInterface.TAG_IMAGE_LENGTH -> dimensionsList.add(it)
-        it.tag == ExifInterface.TAG_IMAGE_WIDTH -> dimensionsList.add(it)
-
-        else -> othersList.add(it)
-      }
+    override fun initialize() {
     }
 
-    return arrayListOf(ExifTagsContainer(locationsList, Type.LOCATION_DATA),
-        ExifTagsContainer(datesList, Type.DATE),
-        ExifTagsContainer(cameraPropertiesList, Type.CAMERA_PROPERTIES),
-        ExifTagsContainer(dimensionsList, Type.DIMENSION),
-        ExifTagsContainer(othersList, Type.OTHER))
-  }
+    fun getDataFromIntent(intent: Intent) {
+        val filePath = intent.getStringExtra("path_file")
+        val list = intent.getSerializableExtra("list") as ArrayList<ExifField>
+        //Log.e("PATH", filePath)
 
-  fun pressedItem(item: ExifTagsContainer){
-    view.showDialog(item)
-  }
+        val bitmap = BitmapFactory.decodeFile(filePath)
+        view.setupUI(bitmap)
+
+        val imageUri = Uri.fromFile(File(filePath))
+        val file = File(filePath)
+        view.setImage(file.name, file.getSize(), imageUri)
+        view.setExifDataList(transformList(list))
+    }
+
+    private fun transformList(list: ArrayList<ExifField>): List<ExifTagsContainer> {
+        val locationsList = arrayListOf<ExifField>()
+        val datesList = arrayListOf<ExifField>()
+        val cameraPropertiesList = arrayListOf<ExifField>()
+        val dimensionsList = arrayListOf<ExifField>()
+        val othersList = arrayListOf<ExifField>()
+
+        list.forEach {
+            when {
+                it.tag == Constants.EXIF_LATITUDE -> locationsList.add(it)
+                it.tag == Constants.EXIF_LONGITUDE -> locationsList.add(it)
+                it.tag == ExifInterface.TAG_GPS_LATITUDE -> locationsList.add(it)
+                it.tag == ExifInterface.TAG_GPS_LATITUDE_REF -> locationsList.add(it)
+                it.tag == ExifInterface.TAG_GPS_LATITUDE -> locationsList.add(it)
+                it.tag == ExifInterface.TAG_GPS_LONGITUDE_REF -> locationsList.add(it)
+
+                it.tag == ExifInterface.TAG_DATETIME -> datesList.add(it)
+                it.tag == ExifInterface.TAG_GPS_DATESTAMP -> datesList.add(it)
+                it.tag == ExifInterface.TAG_DATETIME_DIGITIZED -> datesList.add(it)
+
+                it.tag == ExifInterface.TAG_MAKE -> cameraPropertiesList.add(it)
+                it.tag == ExifInterface.TAG_MODEL -> cameraPropertiesList.add(it)
+                it.tag == ExifInterface.TAG_F_NUMBER -> cameraPropertiesList.add(it)
+                it.tag == ExifInterface.TAG_EXPOSURE_TIME -> cameraPropertiesList.add(it)
+                it.tag == ExifInterface.TAG_ISO_SPEED_RATINGS -> cameraPropertiesList.add(it)
+                it.tag == ExifInterface.TAG_FLASH -> cameraPropertiesList.add(it)
+
+                it.tag == ExifInterface.TAG_IMAGE_LENGTH -> dimensionsList.add(it)
+                it.tag == ExifInterface.TAG_IMAGE_WIDTH -> dimensionsList.add(it)
+
+                else -> othersList.add(it)
+            }
+        }
+
+        return arrayListOf(ExifTagsContainer(locationsList, Type.LOCATION_DATA),
+                ExifTagsContainer(datesList, Type.DATE),
+                ExifTagsContainer(cameraPropertiesList, Type.CAMERA_PROPERTIES),
+                ExifTagsContainer(dimensionsList, Type.DIMENSION),
+                ExifTagsContainer(othersList, Type.OTHER))
+    }
+
+    fun pressedItem(item: ExifTagsContainer) {
+        view.showDialog(item)
+    }
 }

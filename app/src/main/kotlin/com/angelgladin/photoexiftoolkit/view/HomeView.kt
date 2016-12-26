@@ -8,12 +8,13 @@ import java.util.*
  * Created on 12/22/16.
  */
 interface HomeView : BaseView {
-  fun openGallery()
-  fun openUrlDialog()
-  fun openFilePicker()
-  fun showAboutDeveloperDialog()
-  fun showAboutAppDialog()
-  fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
-      availableLocation: Boolean)
-  fun showOnErrorDialog()
+    fun openGallery()
+    fun openUrlDialog()
+    fun openFilePicker()
+    fun showAboutDeveloperDialog()
+    fun showAboutAppDialog()
+    fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
+                                  availableLocation: Boolean)
+
+    fun showOnErrorDialog()
 }

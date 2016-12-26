@@ -15,46 +15,46 @@ import kotlinx.android.synthetic.main.item_exif_data.view.*
  */
 class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: PhotoDetailPresenter) : RecyclerView.Adapter<ExifFieldsAdapter.ViewHolder>() {
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.item_exif_data, parent, false)
-    return ViewHolder(view)
-  }
-
-  override fun getItemCount(): Int = exifList.size
-
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(exifList[position], presenter)
-  }
-
-  class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    fun bind(item: ExifTagsContainer,
-        presenter: PhotoDetailPresenter) = with(itemView) {
-      text_properties.text = item.getOnStringProperties()
-      itemView.setOnClickListener { presenter.pressedItem(item) }
-      when (item.type) {
-        Type.LOCATION_DATA -> {
-          image_type.setImageResource(R.mipmap.ic_launcher)
-          text_type.text = Type.LOCATION_DATA.name
-        }
-        Type.CAMERA_PROPERTIES -> {
-          image_type.setImageResource(R.mipmap.ic_launcher)
-          text_type.text = Type.CAMERA_PROPERTIES.name
-        }
-        Type.DATE -> {
-          image_type.setImageResource(R.mipmap.ic_launcher)
-          text_type.text = Type.DATE.name
-        }
-        Type.DIMENSION -> {
-          image_type.setImageResource(R.mipmap.ic_launcher)
-          text_type.text = Type.DIMENSION.name
-        }
-        Type.OTHER -> {
-          image_type.setImageResource(R.mipmap.ic_launcher)
-          text_type.text = Type.OTHER.name
-        }
-      }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_exif_data, parent, false)
+        return ViewHolder(view)
     }
-  }
+
+    override fun getItemCount(): Int = exifList.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(exifList[position], presenter)
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun bind(item: ExifTagsContainer,
+                 presenter: PhotoDetailPresenter) = with(itemView) {
+            text_properties.text = item.getOnStringProperties()
+            itemView.setOnClickListener { presenter.pressedItem(item) }
+            when (item.type) {
+                Type.LOCATION_DATA -> {
+                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    text_type.text = Type.LOCATION_DATA.name
+                }
+                Type.CAMERA_PROPERTIES -> {
+                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    text_type.text = Type.CAMERA_PROPERTIES.name
+                }
+                Type.DATE -> {
+                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    text_type.text = Type.DATE.name
+                }
+                Type.DIMENSION -> {
+                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    text_type.text = Type.DIMENSION.name
+                }
+                Type.OTHER -> {
+                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    text_type.text = Type.OTHER.name
+                }
+            }
+        }
+    }
 
 }
