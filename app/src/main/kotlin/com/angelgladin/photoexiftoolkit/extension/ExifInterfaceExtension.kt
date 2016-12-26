@@ -6,7 +6,7 @@ import com.angelgladin.photoexiftoolkit.util.Constants
 /**
  * Created on 12/22/16.
  */
-fun ExifInterface.getMap(): MutableMap<String, String>? {
+fun ExifInterface.getMap(): MutableMap<String, String> {
     val mAttributesField = this.javaClass.getDeclaredField("mAttributes")
     mAttributesField.isAccessible = true
 

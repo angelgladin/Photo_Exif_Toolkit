@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
 import android.widget.Toast
@@ -42,7 +41,6 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_photo_detail, menu)
-
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -56,10 +54,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
         Glide.with(this).load(imageUri).into(image_photo)
     }
 
-    override fun setExifDataList(
-            list: List<ExifTagsContainer>) {
-        Log.e("AAAAA", list.toString())
-
+    override fun setExifDataList(list: List<ExifTagsContainer>) {
         recycler_view.setHasFixedSize(true)
         val mLayoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = mLayoutManager

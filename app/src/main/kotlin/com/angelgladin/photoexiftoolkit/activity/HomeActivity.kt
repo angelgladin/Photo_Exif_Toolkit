@@ -2,24 +2,23 @@ package com.angelgladin.photoexiftoolkit.activity
 
 import android.content.Context
 import android.content.Intent
-import android.media.ExifInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.angelgladin.photoexiftoolkit.R
-import com.angelgladin.photoexiftoolkit.domain.ExifField
-import com.angelgladin.photoexiftoolkit.extension.getMap
 import com.angelgladin.photoexiftoolkit.extension.getPathFromUri
 import com.angelgladin.photoexiftoolkit.presenter.HomePresenter
+import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.HomeView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
-import java.util.*
 
 class HomeActivity : AppCompatActivity(), HomeView {
 
-    val PICK_IMAGE_REQUEST = 666
+    companion object {
+        val PICK_IMAGE_REQUEST = 666
+    }
 
     val presenter = HomePresenter(this)
 
@@ -41,11 +40,9 @@ class HomeActivity : AppCompatActivity(), HomeView {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.data != null) {
             val selectedImage = data.data
-
             val pathFile = selectedImage.getPathFromUri(this)
-            val exifInterface = ExifInterface(pathFile)
 
-            presenter.launchPhotoDetailActivity(pathFile!!, exifInterface.getMap())
+            presenter.launchPhotoDetailActivity(pathFile)
         }
     }
 
@@ -54,12 +51,16 @@ class HomeActivity : AppCompatActivity(), HomeView {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_about_developer -> presenter.aboutDeveloper()
-            R.id.action_about_app -> presenter.aboutApp()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_about_developer -> {
+            presenter.aboutDeveloper()
+            true
         }
-        return super.onOptionsItemSelected(item)
+        R.id.action_about_app -> {
+            presenter.aboutApp()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun getContext(): Context = this
@@ -85,12 +86,9 @@ class HomeActivity : AppCompatActivity(), HomeView {
     override fun showAboutAppDialog() {
     }
 
-    override fun launchPhotoDetailActivity(pathFile: String, list: ArrayList<ExifField>,
-                                           availableLocation: Boolean) {
+    override fun launchPhotoDetailActivity(pathFile: String?) {
         val intent = Intent(this, PhotoDetailActivity::class.java)
-        intent.putExtra("path_file", pathFile)
-        intent.putExtra("list", list)
-        intent.putExtra("available_location", availableLocation)
+        intent.putExtra(Constants.PATH_FILE_KEY, pathFile)
         startActivity(intent)
     }
 

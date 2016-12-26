@@ -9,11 +9,11 @@ import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.domain.ExifField
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.domain.Type
+import com.angelgladin.photoexiftoolkit.extension.getMap
 import com.angelgladin.photoexiftoolkit.extension.getSize
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import java.io.File
-import java.util.*
 
 /**
  * Created on 12/22/16.
@@ -24,9 +24,10 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
     fun getDataFromIntent(intent: Intent) {
-        val filePath = intent.getStringExtra("path_file")
-        val list = intent.getSerializableExtra("list") as ArrayList<ExifField>
-        //Log.e("PATH", filePath)
+        val filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
+
+        val exifInterface = ExifInterface(filePath)
+        val map = exifInterface.getMap()
 
         val bitmap = BitmapFactory.decodeFile(filePath)
         view.setupUI(bitmap)
@@ -34,40 +35,45 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         val imageUri = Uri.fromFile(File(filePath))
         val file = File(filePath)
         view.setImage(file.name, file.getSize(), imageUri)
-        view.setExifDataList(transformList(list))
+
+        view.setExifDataList(transformList(map))
     }
 
-    private fun transformList(list: ArrayList<ExifField>): List<ExifTagsContainer> {
+    private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
         val locationsList = arrayListOf<ExifField>()
         val datesList = arrayListOf<ExifField>()
         val cameraPropertiesList = arrayListOf<ExifField>()
         val dimensionsList = arrayListOf<ExifField>()
         val othersList = arrayListOf<ExifField>()
 
-        list.forEach {
+        map.forEach {
             when {
-                it.tag == Constants.EXIF_LATITUDE -> locationsList.add(it)
-                it.tag == Constants.EXIF_LONGITUDE -> locationsList.add(it)
-                it.tag == ExifInterface.TAG_GPS_LATITUDE -> locationsList.add(it)
-                it.tag == ExifInterface.TAG_GPS_LATITUDE_REF -> locationsList.add(it)
-                it.tag == ExifInterface.TAG_GPS_LATITUDE -> locationsList.add(it)
-                it.tag == ExifInterface.TAG_GPS_LONGITUDE_REF -> locationsList.add(it)
+                it.key == Constants.EXIF_LATITUDE
+                        || it.key == Constants.EXIF_LONGITUDE
+                        || it.key == ExifInterface.TAG_GPS_LATITUDE
+                        || it.key == ExifInterface.TAG_GPS_LATITUDE_REF
+                        || it.key == ExifInterface.TAG_GPS_LONGITUDE
+                        || it.key == ExifInterface.TAG_GPS_LONGITUDE_REF ->
+                    locationsList.add(ExifField(it.key, it.value))
 
-                it.tag == ExifInterface.TAG_DATETIME -> datesList.add(it)
-                it.tag == ExifInterface.TAG_GPS_DATESTAMP -> datesList.add(it)
-                it.tag == ExifInterface.TAG_DATETIME_DIGITIZED -> datesList.add(it)
+                it.key == ExifInterface.TAG_DATETIME
+                        || it.key == ExifInterface.TAG_GPS_DATESTAMP
+                        || it.key == ExifInterface.TAG_DATETIME_DIGITIZED ->
+                    datesList.add(ExifField(it.key, it.value))
 
-                it.tag == ExifInterface.TAG_MAKE -> cameraPropertiesList.add(it)
-                it.tag == ExifInterface.TAG_MODEL -> cameraPropertiesList.add(it)
-                it.tag == ExifInterface.TAG_F_NUMBER -> cameraPropertiesList.add(it)
-                it.tag == ExifInterface.TAG_EXPOSURE_TIME -> cameraPropertiesList.add(it)
-                it.tag == ExifInterface.TAG_ISO_SPEED_RATINGS -> cameraPropertiesList.add(it)
-                it.tag == ExifInterface.TAG_FLASH -> cameraPropertiesList.add(it)
+                it.key == ExifInterface.TAG_MAKE
+                        || it.key == ExifInterface.TAG_MODEL
+                        || it.key == ExifInterface.TAG_F_NUMBER
+                        || it.key == ExifInterface.TAG_EXPOSURE_TIME
+                        || it.key == ExifInterface.TAG_ISO_SPEED_RATINGS
+                        || it.key == ExifInterface.TAG_FLASH ->
+                    cameraPropertiesList.add(ExifField(it.key, it.value))
 
-                it.tag == ExifInterface.TAG_IMAGE_LENGTH -> dimensionsList.add(it)
-                it.tag == ExifInterface.TAG_IMAGE_WIDTH -> dimensionsList.add(it)
+                it.key == ExifInterface.TAG_IMAGE_LENGTH
+                        || it.key == ExifInterface.TAG_IMAGE_WIDTH ->
+                    dimensionsList.add(ExifField(it.key, it.value))
 
-                else -> othersList.add(it)
+                else -> othersList.add(ExifField(it.key, it.value))
             }
         }
 
