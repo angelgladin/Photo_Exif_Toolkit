@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
+import com.angelgladin.photoexiftoolkit.dialog.MapDialog
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.domain.Type
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
@@ -110,8 +111,9 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
               Toast.LENGTH_SHORT).show()
         }
         2 -> {
-          Toast.makeText(this@PhotoDetailActivity, "Map not implemented yet",
-              Toast.LENGTH_SHORT).show()
+          val fm = supportFragmentManager
+          val editNameDialogFragment = MapDialog()
+          editNameDialogFragment.show(fm, "maps")
         }
       }
     })
