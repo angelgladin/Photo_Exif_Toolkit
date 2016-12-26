@@ -2,10 +2,9 @@ package com.angelgladin.photoexiftoolkit.dialog
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.support.v7.widget.Toolbar
+import android.view.*
+import android.widget.Toast
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,7 +17,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 /**
  * Created on 12/22/16.
  */
-class MapDialog : DialogFragment(), OnMapReadyCallback {
+class MapDialog : DialogFragment(), OnMapReadyCallback, Toolbar.OnMenuItemClickListener {
+
+  var mMap: GoogleMap? = null
 
   companion object {
     fun newInstance(latitude: Double, longitude: Double): MapDialog {
@@ -31,12 +32,19 @@ class MapDialog : DialogFragment(), OnMapReadyCallback {
     }
   }
 
-  var mMap: GoogleMap? = null
-
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
+    val view = inflater.inflate(R.layout.dialog_maps, container, false)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-    return inflater.inflate(R.layout.dialog_maps, container, false)
+
+    val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+    toolbar.inflateMenu(R.menu.menu_dialog_maps)
+    toolbar.setOnMenuItemClickListener(this)
+    toolbar.setNavigationIcon(android.R.drawable.ic_media_play)
+    toolbar.setNavigationOnClickListener { dismiss() }
+    toolbar.title = "Location"
+
+    return view
   }
 
   override fun onResume() {
@@ -47,12 +55,21 @@ class MapDialog : DialogFragment(), OnMapReadyCallback {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    val f = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+    val f = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
     if (f != null) fragmentManager.beginTransaction().remove(f).commit()
+  }
+
+  override fun onMenuItemClick(item: MenuItem): Boolean = when (item.itemId) {
+    R.id.action_edit_location -> {
+      editLocation()
+      true
+    }
+    else -> false
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
     mMap = googleMap
+    mMap!!.uiSettings.isZoomControlsEnabled = true
 
     val location = LatLng(arguments.getDouble(Constants.EXIF_LATITUDE),
         arguments.getDouble(Constants.EXIF_LONGITUDE))
@@ -64,6 +81,10 @@ class MapDialog : DialogFragment(), OnMapReadyCallback {
         .title("TODO")
         .snippet("TODO")
         .position(location))
+  }
+
+  private fun editLocation() {
+    Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
   }
 
 }
