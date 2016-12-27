@@ -86,12 +86,13 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
     override fun showDialog(item: ExifTagsContainer) {
         val alertDialogBuilder = AlertDialog.Builder(this)
-        val optionsList = mutableListOf("Copy to clipboard", "Edit")
+        val optionsList = mutableListOf(resources.getString(R.string.alert_item_copy_to_clipboard),
+                resources.getString(R.string.alert_item_edit))
         when (item.type) {
-            Type.LOCATION_DATA -> optionsList.add("Open map")
-            Type.DIMENSION -> optionsList.remove("Edit")
+            Type.LOCATION_DATA -> optionsList.add(resources.getString(R.string.alert_item_open_map))
+            Type.DIMENSION -> optionsList.remove(resources.getString(R.string.alert_item_edit))
         }
-        alertDialogBuilder.setTitle("Select an action")
+        alertDialogBuilder.setTitle(resources.getString(R.string.alert_select_an_action))
         alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
             when (which) {
                 0 -> {

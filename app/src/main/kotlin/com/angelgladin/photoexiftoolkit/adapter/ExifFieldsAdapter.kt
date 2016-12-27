@@ -34,23 +34,23 @@ class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: Ph
             when (item.type) {
                 Type.LOCATION_DATA -> {
                     image_type.setImageResource(R.drawable.ic_pin_drop_black_24dp)
-                    text_type.text = Type.LOCATION_DATA.name
+                    text_type.text = resources.getString(R.string.item_location)
                 }
                 Type.CAMERA_PROPERTIES -> {
                     image_type.setImageResource(R.drawable.ic_photo_camera_black_24dp)
-                    text_type.text = Type.CAMERA_PROPERTIES.name
+                    text_type.text = resources.getString(R.string.item_date)
                 }
                 Type.DATE -> {
                     image_type.setImageResource(R.drawable.ic_date_range_black_24dp)
-                    text_type.text = Type.DATE.name
+                    text_type.text = resources.getString(R.string.item_camera_properties)
                 }
                 Type.DIMENSION -> {
                     image_type.setImageResource(R.drawable.ic_photo_size_select_actual_black_24dp)
-                    text_type.text = Type.DIMENSION.name
+                    text_type.text = resources.getString(R.string.item_dimension)
                 }
                 Type.OTHER -> {
                     image_type.setImageResource(R.drawable.ic_blur_on_black_24dp)
-                    text_type.text = Type.OTHER.name
+                    text_type.text = resources.getString(R.string.item_other)
                 }
             }
         }

@@ -42,7 +42,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, Toolbar.OnMenuItemClickL
         toolbar.setOnMenuItemClickListener(this)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { dismiss() }
-        toolbar.title = "Location"
+        toolbar.title = resources.getString(R.string.dialog_maps_title)
 
         return view
     }
@@ -84,7 +84,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, Toolbar.OnMenuItemClickL
     }
 
     private fun editLocation() {
-        Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, resources.getString(R.string.not_implemented_yet), Toast.LENGTH_SHORT).show()
     }
 
 }
