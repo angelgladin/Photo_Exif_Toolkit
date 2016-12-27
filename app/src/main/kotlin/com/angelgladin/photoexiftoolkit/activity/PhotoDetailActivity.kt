@@ -5,15 +5,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.WindowManager
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
 import com.angelgladin.photoexiftoolkit.dialog.MapDialog
@@ -85,21 +82,6 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
         image_photo.setImageBitmap(bitmap)
 
-        val palette: Palette? = Palette.from(bitmap).generate()
-        val vibrantPalette = palette?.vibrantSwatch
-        val darkVibrantPalette = palette?.darkVibrantSwatch
-
-        if (vibrantPalette != null) {
-            toolbar_layout.setContentScrimColor(vibrantPalette.rgb)
-        }
-
-        if (darkVibrantPalette != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window = window
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = darkVibrantPalette.rgb
-            }
-        }
     }
 
     override fun showDialog(item: ExifTagsContainer) {

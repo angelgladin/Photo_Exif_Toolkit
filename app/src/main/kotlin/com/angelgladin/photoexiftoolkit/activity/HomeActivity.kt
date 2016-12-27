@@ -31,9 +31,9 @@ class HomeActivity : AppCompatActivity(), HomeView {
     }
 
     private fun setupOnClickListeners() {
-        button_from_gallery.setOnClickListener { presenter.getPhotoFromGallery() }
-        button_from_url.setOnClickListener { presenter.getPhotoFromUrl() }
-        button_file_picker.setOnClickListener { presenter.getPhotoFromFilePicker() }
+        card_view_from_gallery.setOnClickListener { presenter.getPhotoFromGallery() }
+        card_view_from_file_picker.setOnClickListener { presenter.getPhotoFromUrl() }
+        card_view_from_url.setOnClickListener { presenter.getPhotoFromFilePicker() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
