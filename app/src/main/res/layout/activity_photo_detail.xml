@@ -44,7 +44,7 @@
         <LinearLayout
             android:id="@+id/container_text_image_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="#80000000"
             >
 
@@ -53,11 +53,11 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginBottom="10dp"
-              android:layout_marginLeft="16dp"
+              android:layout_marginLeft="64dp"
               android:layout_marginRight="16dp"
               android:layout_marginTop="10dp"
-              android:text="That’s the core part of this article"
               android:textSize="14sp"
+              android:layout_gravity="center_vertical"
               />
         </LinearLayout>
 
@@ -65,6 +65,7 @@
 
       <android.support.v7.widget.Toolbar
           android:id="@+id/toolbar"
+          android:background="@android:color/transparent"
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize"
           app:layout_collapseMode="pin"
