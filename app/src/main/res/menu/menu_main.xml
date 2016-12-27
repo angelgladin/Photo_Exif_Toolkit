@@ -2,16 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.angelgladin.myapplication.MainActivity">
-  <item
-      android:id="@+id/action_about_app"
-      android:icon="@android:drawable/star_on"
-      android:orderInCategory="100"
-      android:title="About the app"
-      app:showAsAction="ifRoom"/>
-  <item
-      android:id="@+id/action_about_developer"
-      android:icon="@android:drawable/ic_media_play"
-      android:orderInCategory="200"
-      android:title="About developer"
-      app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_about_app"
+        android:icon="@drawable/ic_info_outline_black_24dp"
+        android:orderInCategory="1"
+        android:title="About the app"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_about_developer"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:orderInCategory="2"
+        android:title="About developer"
+        app:showAsAction="always" />
 </menu>

@@ -2,10 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <item
-      android:id="@+id/action_edit_location"
-      android:icon="@android:drawable/ic_media_play"
-      android:orderInCategory="200"
-      android:title="Edit location"
-      app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_done_editing"
+        android:icon="@drawable/ic_done_black_24dp"
+        android:orderInCategory="1"
+        android:title="Done editing"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_edit_location"
+        android:icon="@drawable/ic_create_black_24dp"
+        android:orderInCategory="2"
+        android:title="Edit locations"
+        app:showAsAction="always" />
 </menu>
