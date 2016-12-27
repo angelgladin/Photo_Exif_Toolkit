@@ -9,23 +9,17 @@ import com.angelgladin.photoexiftoolkit.view.HomeView
  */
 class HomePresenter(override val view: HomeView) : BasePresenter<BaseView> {
     override fun initialize() {
-
     }
 
     fun getPhotoFromGallery() = view.openGallery()
 
     fun getPhotoFromUrl() = view.openUrlDialog()
 
-    fun aboutDeveloper() {
-    }
+    fun aboutDeveloper() = view.showAboutDeveloperDialog()
 
-    fun aboutApp() {
-    }
+    fun aboutApp() = view.showAboutAppDialog()
 
-    fun getPhotoFromFilePicker() {
-    }
+    fun getPhotoFromFilePicker() = view.openFilePicker()
 
     fun launchPhotoDetailActivity(pathFile: String?) = view.launchPhotoDetailActivity(pathFile)
-
-
 }

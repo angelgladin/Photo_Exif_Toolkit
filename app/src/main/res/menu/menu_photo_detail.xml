@@ -4,15 +4,15 @@
     tools:context="com.angelgladin.photoexiftoolkit.activity.PhotoDetailActivity">
 
     <item
-        android:id="@+id/action_clear_exif"
+        android:id="@+id/action_clean_exif"
         android:icon="@drawable/ic_clear_all_black_24dp"
         android:orderInCategory="1"
         android:title="About developer"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_black_24dp"
         android:orderInCategory="2"
         android:title="About developer"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.extension.getPathFromUri
+import com.angelgladin.photoexiftoolkit.extension.showSnackbar
 import com.angelgladin.photoexiftoolkit.presenter.HomePresenter
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.HomeView
@@ -75,15 +76,19 @@ class HomeActivity : AppCompatActivity(), HomeView {
     }
 
     override fun openUrlDialog() {
+        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
     }
 
     override fun openFilePicker() {
+        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
     }
 
     override fun showAboutDeveloperDialog() {
+        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
     }
 
     override fun showAboutAppDialog() {
+        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
     }
 
     override fun launchPhotoDetailActivity(pathFile: String?) {

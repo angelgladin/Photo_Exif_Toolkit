@@ -12,13 +12,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.Toast
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
 import com.angelgladin.photoexiftoolkit.dialog.MapDialog
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.domain.Type
+import com.angelgladin.photoexiftoolkit.extension.showSnackbar
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
@@ -35,6 +36,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_detail)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         presenter.getDataFromIntent(intent)
     }
@@ -42,6 +44,22 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_photo_detail, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        R.id.action_share -> {
+            coordinator_layout.showSnackbar(R.string.not_implemented_yet)
+            true
+        }
+        R.id.action_clean_exif -> {
+            coordinator_layout.showSnackbar(R.string.not_implemented_yet)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun getContext(): Context = this
@@ -99,12 +117,10 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
                     val clip = ClipData.newPlainText(item.type.name, item.getOnStringProperties())
                     clipboard.primaryClip = clip
 
-                    Toast.makeText(this@PhotoDetailActivity, "Text successfully copied to clipboard",
-                            Toast.LENGTH_SHORT).show()
+                    coordinator_layout.showSnackbar(R.string.text_copied_to_clipboard)
                 }
                 1 -> {
-                    Toast.makeText(this@PhotoDetailActivity, "Not implemented yet :p",
-                            Toast.LENGTH_SHORT).show()
+                    coordinator_layout.showSnackbar(R.string.not_implemented_yet)
                 }
                 2 -> {
                     val lat = item.list.find { it.tag == Constants.EXIF_LATITUDE }?.attribute?.toDouble()

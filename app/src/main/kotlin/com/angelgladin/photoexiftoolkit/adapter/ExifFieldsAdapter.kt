@@ -22,35 +22,34 @@ class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: Ph
 
     override fun getItemCount(): Int = exifList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(exifList[position], presenter)
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+            holder.bind(exifList[position], presenter)
+
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(item: ExifTagsContainer,
-                 presenter: PhotoDetailPresenter) = with(itemView) {
+        fun bind(item: ExifTagsContainer, presenter: PhotoDetailPresenter) = with(itemView) {
             text_properties.text = item.getOnStringProperties()
             itemView.setOnClickListener { presenter.pressedItem(item) }
             when (item.type) {
                 Type.LOCATION_DATA -> {
-                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    image_type.setImageResource(R.drawable.ic_pin_drop_black_24dp)
                     text_type.text = Type.LOCATION_DATA.name
                 }
                 Type.CAMERA_PROPERTIES -> {
-                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    image_type.setImageResource(R.drawable.ic_photo_camera_black_24dp)
                     text_type.text = Type.CAMERA_PROPERTIES.name
                 }
                 Type.DATE -> {
-                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    image_type.setImageResource(R.drawable.ic_date_range_black_24dp)
                     text_type.text = Type.DATE.name
                 }
                 Type.DIMENSION -> {
-                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    image_type.setImageResource(R.drawable.ic_photo_size_select_actual_black_24dp)
                     text_type.text = Type.DIMENSION.name
                 }
                 Type.OTHER -> {
-                    image_type.setImageResource(R.mipmap.ic_launcher)
+                    image_type.setImageResource(R.drawable.ic_blur_on_black_24dp)
                     text_type.text = Type.OTHER.name
                 }
             }

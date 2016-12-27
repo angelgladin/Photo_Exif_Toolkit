@@ -40,7 +40,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, Toolbar.OnMenuItemClickL
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.inflateMenu(R.menu.menu_dialog_maps)
         toolbar.setOnMenuItemClickListener(this)
-        toolbar.setNavigationIcon(android.R.drawable.ic_media_play)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { dismiss() }
         toolbar.title = "Location"
 
