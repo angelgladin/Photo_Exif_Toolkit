@@ -1,7 +1,6 @@
 package com.angelgladin.photoexiftoolkit.presenter
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.ExifInterface
 import android.net.Uri
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
@@ -20,6 +19,8 @@ import java.io.File
  */
 class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<BaseView> {
 
+    lateinit var exifTagsContainerList: List<ExifTagsContainer>
+
     override fun initialize() {
     }
 
@@ -27,16 +28,13 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         val filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
 
         val exifInterface = ExifInterface(filePath)
-        val map = exifInterface.getMap()
-
-        val bitmap = BitmapFactory.decodeFile(filePath)
-        view.setupUI(bitmap)
+        exifTagsContainerList = transformList(exifInterface.getMap())
 
         val imageUri = Uri.fromFile(File(filePath))
         val file = File(filePath)
         view.setImage(file.name, file.getSize(), imageUri)
 
-        view.setExifDataList(transformList(map))
+        view.setExifDataList(exifTagsContainerList)
     }
 
     private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
@@ -85,6 +83,37 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
     fun pressedItem(item: ExifTagsContainer) {
-        view.showDialog(item)
+        view.showAlertDialogWhenItemIsPressed(item)
     }
+
+    fun copyDataToClipboard(item: ExifTagsContainer) = view.copyDataToClipboard(item)
+
+    fun editLocation(item: ExifTagsContainer) {
+
+    }
+
+    fun editDate(item: ExifTagsContainer) {
+
+    }
+
+    fun editExifFieldsOpeningDialog(item: ExifTagsContainer) {
+
+    }
+
+    fun openDialogMap(item: ExifTagsContainer) {
+        val latitude = item.list.find { it.tag == Constants.EXIF_LATITUDE }?.attribute?.toDouble()
+        val longitude = item.list.find { it.tag == Constants.EXIF_LONGITUDE }?.attribute?.toDouble()
+        view.openDialogMap(latitude, longitude)
+    }
+
+    fun shareData() {
+        val s = exifTagsContainerList
+                .map { "\n\n${it.type.name}:\n${it.getOnStringProperties()}" }.toString()
+        view.shareData(s.substring(3, s.length - 1))
+    }
+
+    fun clearExif() {
+        //TODO:
+    }
+
 }
