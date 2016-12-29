@@ -135,12 +135,13 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     private fun showAlertDialog() {
         AlertDialog.Builder(context)
-                .setTitle("hola")
+                .setTitle("Edit location")
                 .setMessage(resources.getString(R.string.lorem_ipsum))
                 .setPositiveButton(resources.getString(android.R.string.ok),
                         { dialogInterface, i ->
                             locationChanged = true
                             location = marker.position
+                            dismiss()
                         })
                 .setNegativeButton(resources.getString(android.R.string.cancel),
                         { dialogInterface, i ->
