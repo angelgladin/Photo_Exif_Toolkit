@@ -3,7 +3,7 @@
     package="com.angelgladin.photoexiftoolkit">
 
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
