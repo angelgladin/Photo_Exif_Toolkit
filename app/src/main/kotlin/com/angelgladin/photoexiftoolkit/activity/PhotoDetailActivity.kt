@@ -149,6 +149,6 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
     }
 
     override fun locationChanged(locationChanged: Boolean, location: Location) {
-        Log.e("asdasd", location.toString())
+        Log.e("asdasd", "Location changed: $locationChanged, Location: $location")
     }
 }

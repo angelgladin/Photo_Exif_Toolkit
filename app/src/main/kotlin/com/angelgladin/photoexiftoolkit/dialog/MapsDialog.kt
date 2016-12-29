@@ -121,9 +121,10 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
         AlertDialog.Builder(context)
                 .setTitle("hola")
                 .setMessage(resources.getString(R.string.lorem_ipsum))
+                .setPositiveButton(resources.getString(android.R.string.ok),
+                        { dialogInterface, i -> locationChanged = true })
                 .setNegativeButton(resources.getString(android.R.string.cancel),
                         { dialogInterface, i ->
-                            locationChanged = true
                             marker.remove()
                             addMarker(location)
                         })
