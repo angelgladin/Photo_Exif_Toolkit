@@ -21,7 +21,7 @@ import java.io.IOException
  */
 class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<BaseView> {
 
-    lateinit var exifTagsContainerList: List<ExifTagsContainer>
+    lateinit var exifTagsContainerList: MutableList<ExifTagsContainer>
     lateinit var exifInterface: ExifInterface
 
     override fun initialize() {
@@ -41,7 +41,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         view.setExifDataList(exifTagsContainerList)
     }
 
-    private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
+    private fun transformList(map: MutableMap<String, String>): MutableList<ExifTagsContainer> {
         val locationsList = arrayListOf<ExifField>()
         val datesList = arrayListOf<ExifField>()
         val cameraPropertiesList = arrayListOf<ExifField>()

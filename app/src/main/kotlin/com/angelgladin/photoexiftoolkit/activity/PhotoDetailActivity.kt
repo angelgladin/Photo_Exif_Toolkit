@@ -30,6 +30,8 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
 
     val presenter = PhotoDetailPresenter(this)
 
+    lateinit var mAdapter: ExifFieldsAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_detail)
@@ -67,11 +69,11 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
         Glide.with(this).load(imageUri).into(image_photo)
     }
 
-    override fun setExifDataList(list: List<ExifTagsContainer>) {
+    override fun setExifDataList(list: MutableList<ExifTagsContainer>) {
         recycler_view.setHasFixedSize(true)
         val mLayoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = mLayoutManager
-        val mAdapter = ExifFieldsAdapter(list, presenter)
+        mAdapter = ExifFieldsAdapter(list, presenter)
         recycler_view.adapter = mAdapter
     }
 
