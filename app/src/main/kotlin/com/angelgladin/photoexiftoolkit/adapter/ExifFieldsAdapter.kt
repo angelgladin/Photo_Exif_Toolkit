@@ -30,6 +30,7 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
         notifyDataSetChanged()
     }
 
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: ExifTagsContainer, presenter: PhotoDetailPresenter) = with(itemView) {
@@ -42,11 +43,11 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
                 }
                 Type.CAMERA_PROPERTIES -> {
                     image_type.setImageResource(R.drawable.ic_photo_camera_black_24dp)
-                    text_type.text = resources.getString(R.string.item_date)
+                    text_type.text = resources.getString(R.string.item_camera_properties)
                 }
                 Type.DATE -> {
                     image_type.setImageResource(R.drawable.ic_date_range_black_24dp)
-                    text_type.text = resources.getString(R.string.item_camera_properties)
+                    text_type.text = resources.getString(R.string.item_date)
                 }
                 Type.DIMENSION -> {
                     image_type.setImageResource(R.drawable.ic_photo_size_select_actual_black_24dp)
