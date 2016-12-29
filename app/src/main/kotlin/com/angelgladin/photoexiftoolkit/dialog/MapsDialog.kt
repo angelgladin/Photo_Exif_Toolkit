@@ -62,6 +62,15 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
         return view
     }
 
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        try {
+            dialogEvents = (activity as? DialogEvents)!!
+        } catch (e: ClassCastException) {
+            throw ClassCastException(activity.toString() + " must implement DialogEvents")
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         val mapFragment = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -118,21 +127,27 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     private fun doneEditing() {
         editModeLocation = false
+        showAlertDialog()
+        toolbar.title = resources.getString(R.string.dialog_maps_title)
+        toolbar.menu.findItem(R.id.action_done_editing).isVisible = false
+        toolbar.menu.findItem(R.id.action_edit_location).isVisible = true
+    }
+
+    private fun showAlertDialog() {
         AlertDialog.Builder(context)
                 .setTitle("hola")
                 .setMessage(resources.getString(R.string.lorem_ipsum))
                 .setPositiveButton(resources.getString(android.R.string.ok),
-                        { dialogInterface, i -> locationChanged = true })
+                        { dialogInterface, i ->
+                            locationChanged = true
+                            location = marker.position
+                        })
                 .setNegativeButton(resources.getString(android.R.string.cancel),
                         { dialogInterface, i ->
                             marker.remove()
                             addMarker(location)
                         })
                 .show()
-
-        toolbar.title = resources.getString(R.string.dialog_maps_title)
-        toolbar.menu.findItem(R.id.action_done_editing).isVisible = false
-        toolbar.menu.findItem(R.id.action_edit_location).isVisible = true
     }
 
     private fun addMarker(location: LatLng) {
@@ -140,14 +155,6 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
     }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
-        try {
-            dialogEvents = (activity as? DialogEvents)!!
-        } catch (e: ClassCastException) {
-            throw ClassCastException(activity.toString() + " must implement DialogEvents")
-        }
-    }
 
     interface DialogEvents {
         fun locationChanged(locationChanged: Boolean, location: Location)
