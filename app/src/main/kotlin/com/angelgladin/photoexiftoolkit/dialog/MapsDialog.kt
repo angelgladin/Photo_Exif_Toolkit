@@ -2,6 +2,7 @@ package com.angelgladin.photoexiftoolkit.dialog
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
@@ -28,6 +29,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
     lateinit var marker: Marker
 
     var editModeLocation = false
+    var locationChanged = false
 
     companion object {
         fun newInstance(latitude: Double, longitude: Double): MapDialog {
@@ -46,12 +48,13 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         toolbar = view.findViewById(R.id.toolbar) as Toolbar
-        toolbar.inflateMenu(R.menu.menu_dialog_maps)
-        toolbar.setOnMenuItemClickListener(this)
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        toolbar.setNavigationOnClickListener { dismiss() }
-        toolbar.title = resources.getString(R.string.dialog_maps_title)
-
+        toolbar.apply {
+            inflateMenu(R.menu.menu_dialog_maps)
+            setOnMenuItemClickListener(this@MapDialog)
+            setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+            setNavigationOnClickListener { dismiss() }
+            title = resources.getString(R.string.dialog_maps_title)
+        }
         return view
     }
 
@@ -79,41 +82,24 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
         else -> false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        location = LatLng(arguments.getDouble(Constants.EXIF_LATITUDE), arguments.getDouble(Constants.EXIF_LONGITUDE))
 
-        mMap.setOnMapClickListener(this)
-
-        location = LatLng(arguments.getDouble(Constants.EXIF_LATITUDE),
-                arguments.getDouble(Constants.EXIF_LONGITUDE))
-
-        mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.isMyLocationEnabled = true
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.8f))
-
-        marker = mMap.addMarker(MarkerOptions()
-                .title("TODO")
-                .snippet("TODO")
-                .position(location))
-        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-
+        mMap.apply {
+            setOnMapClickListener(this@MapDialog)
+            uiSettings.isZoomControlsEnabled = true
+            isMyLocationEnabled = true
+            moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.8f))
+        }
+        addMarker(location)
     }
 
     override fun onMapClick(latLng: LatLng) {
         if (editModeLocation) {
-            Log.e(this.javaClass.name, "Latitude ${latLng.latitude} -- Longitude ${latLng.longitude}")
+            Log.e(this.javaClass.simpleName, "Latitude ${latLng.latitude} -- Longitude ${latLng.longitude}")
             marker.remove()
-
-            marker = mMap.addMarker(MarkerOptions()
-                    .title("TODO")
-                    .snippet("TODO")
-                    .position(latLng))
-            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            addMarker(latLng)
         }
     }
 
@@ -126,8 +112,24 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     private fun doneEditing() {
         editModeLocation = false
+        AlertDialog.Builder(context)
+                .setTitle("hola")
+                .setMessage(resources.getString(R.string.lorem_ipsum))
+                .setNegativeButton(resources.getString(android.R.string.cancel),
+                        { dialogInterface, i ->
+                            locationChanged = true
+                            marker.remove()
+                            addMarker(location)
+                        })
+                .show()
+
         toolbar.title = resources.getString(R.string.dialog_maps_title)
         toolbar.menu.findItem(R.id.action_done_editing).isVisible = false
         toolbar.menu.findItem(R.id.action_edit_location).isVisible = true
+    }
+
+    private fun addMarker(location: LatLng) {
+        marker = mMap.addMarker(MarkerOptions().position(location))
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
     }
 }
