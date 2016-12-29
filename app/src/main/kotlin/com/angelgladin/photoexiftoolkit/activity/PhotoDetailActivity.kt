@@ -9,12 +9,14 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
 import com.angelgladin.photoexiftoolkit.dialog.MapDialog
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
+import com.angelgladin.photoexiftoolkit.domain.Location
 import com.angelgladin.photoexiftoolkit.domain.Type
 import com.angelgladin.photoexiftoolkit.extension.showSnackbar
 import com.angelgladin.photoexiftoolkit.presenter.PhotoDetailPresenter
@@ -24,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_photo_detail.*
 import kotlinx.android.synthetic.main.content_photo_detail.*
 
 
-class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
+class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.DialogEvents {
 
     val presenter = PhotoDetailPresenter(this)
 
@@ -144,5 +146,9 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView {
 
     override fun onError() {
         coordinator_layout.showSnackbar(R.string.not_implemented_yet)
+    }
+
+    override fun locationChanged(locationChanged: Boolean, location: Location) {
+        Log.e("asdasd", location.toString())
     }
 }

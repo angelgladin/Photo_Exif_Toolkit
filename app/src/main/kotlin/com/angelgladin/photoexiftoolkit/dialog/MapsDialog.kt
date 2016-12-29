@@ -1,5 +1,6 @@
 package com.angelgladin.photoexiftoolkit.dialog
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -7,6 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
 import com.angelgladin.photoexiftoolkit.R
+import com.angelgladin.photoexiftoolkit.domain.Location
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,6 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions
  * Created on 12/22/16.
  */
 class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener, Toolbar.OnMenuItemClickListener {
+
+    lateinit var dialogEvents: DialogEvents
 
     lateinit var toolbar: Toolbar
 
@@ -66,6 +70,8 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     override fun onDestroyView() {
         super.onDestroyView()
+        dialogEvents.locationChanged(locationChanged, Location(location.latitude, location.longitude))
+
         val f = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         if (f != null) fragmentManager.beginTransaction().remove(f).commit()
     }
@@ -131,5 +137,18 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
     private fun addMarker(location: LatLng) {
         marker = mMap.addMarker(MarkerOptions().position(location))
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+    }
+
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        try {
+            dialogEvents = (activity as? DialogEvents)!!
+        } catch (e: ClassCastException) {
+            throw ClassCastException(activity.toString() + " must implement DialogEvents")
+        }
+    }
+
+    interface DialogEvents {
+        fun locationChanged(locationChanged: Boolean, location: Location)
     }
 }

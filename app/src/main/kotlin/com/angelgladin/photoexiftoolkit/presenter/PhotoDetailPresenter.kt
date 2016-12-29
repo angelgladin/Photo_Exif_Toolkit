@@ -3,6 +3,7 @@ package com.angelgladin.photoexiftoolkit.presenter
 import android.content.Intent
 import android.media.ExifInterface
 import android.net.Uri
+import android.util.Log
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.domain.ExifField
@@ -28,6 +29,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         val filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
 
         val exifInterface = ExifInterface(filePath)
+        Log.e(this.javaClass.simpleName, filePath)
         exifTagsContainerList = transformList(exifInterface.getMap())
 
         val imageUri = Uri.fromFile(File(filePath))
