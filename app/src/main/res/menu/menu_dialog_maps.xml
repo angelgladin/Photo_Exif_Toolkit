@@ -6,6 +6,7 @@
         android:id="@+id/action_done_editing"
         android:icon="@drawable/ic_done_black_24dp"
         android:orderInCategory="1"
+        android:visible="false"
         android:title="Done editing"
         app:showAsAction="ifRoom" />
     <item
