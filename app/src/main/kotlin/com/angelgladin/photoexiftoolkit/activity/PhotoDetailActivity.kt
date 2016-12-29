@@ -54,10 +54,6 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
             presenter.shareData()
             true
         }
-        R.id.action_clear_exif -> {
-            presenter.clearExif()
-            true
-        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -82,24 +78,21 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
     override fun showAlertDialogWhenItemIsPressed(item: ExifTagsContainer) {
         val alertDialogBuilder = AlertDialog.Builder(this)
 
-        val optionsList = mutableListOf(resources.getString(R.string.alert_item_copy_to_clipboard),
-                resources.getString(R.string.alert_item_edit))
-
+        val optionsList = mutableListOf(resources.getString(R.string.alert_item_copy_to_clipboard))
         if (item.type == Type.LOCATION_DATA)
             optionsList.add(resources.getString(R.string.alert_item_open_map))
-        else if (item.type == Type.LOCATION_DATA)
-            optionsList.remove(resources.getString(R.string.alert_item_edit))
+        else if (item.type == Type.DATE)
+            optionsList.add(resources.getString(R.string.alert_item_edit))
 
         alertDialogBuilder.setTitle(resources.getString(R.string.alert_select_an_action))
         alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
-            when (which) {
-                0 -> presenter.copyDataToClipboard(item)
-                1 -> when (item.type) {
-                    Type.LOCATION_DATA -> presenter.editLocation(item)
-                    Type.DATE -> presenter.editDate(item)
-                    else -> presenter.editExifFieldsOpeningDialog(item)
-                }
-                2 -> presenter.openDialogMap(item)
+            if (which == 0) {
+                presenter.copyDataToClipboard(item)
+            } else if (which == 1) {
+                if (item.type == Type.LOCATION_DATA)
+                    presenter.openDialogMap(item)
+                else if (item.type == Type.LOCATION_DATA)
+                    presenter.editDate(item)
             }
         })
         val dialog = alertDialogBuilder.create()
@@ -112,18 +105,6 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
         clipboard.primaryClip = clip
 
         coordinator_layout.showSnackbar(R.string.text_copied_to_clipboard)
-    }
-
-    override fun editLocation(item: ExifTagsContainer) {
-        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
-    }
-
-    override fun editDate(item: ExifTagsContainer) {
-        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
-    }
-
-    override fun editExifFieldsOpeningDialog(item: ExifTagsContainer) {
-        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
     }
 
     override fun openDialogMap(latitude: Double?, longitude: Double?) {
@@ -140,15 +121,19 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
         startActivity(sendIntent)
     }
 
-    override fun clearData(list: List<ExifTagsContainer>) {
-        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
+    override fun onCompleteLocationChanged() {
+        coordinator_layout.showSnackbar("Location successfully changed")
     }
 
-    override fun onError() {
-        coordinator_layout.showSnackbar(R.string.not_implemented_yet)
+    override fun onError(message: String, t: Throwable) {
+        t.printStackTrace()
+        coordinator_layout.showSnackbar(message)
     }
 
     override fun locationChanged(locationChanged: Boolean, location: Location) {
-        Log.e("asdasd", "Location changed: $locationChanged, Location: $location")
+        Log.e(this.javaClass.simpleName, "Location changed: $locationChanged, Location: $location")
+        if (locationChanged)
+            presenter.changeLocation(location)
     }
+
 }

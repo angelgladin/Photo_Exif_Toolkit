@@ -30,7 +30,7 @@ class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: Ph
 
         fun bind(item: ExifTagsContainer, presenter: PhotoDetailPresenter) = with(itemView) {
             text_properties.text = item.getOnStringProperties()
-            itemView.setOnClickListener { presenter.pressedItem(item) }
+            itemView.setOnClickListener { presenter.onItemPressed(item) }
             when (item.type) {
                 Type.LOCATION_DATA -> {
                     image_type.setImageResource(R.drawable.ic_pin_drop_black_24dp)

@@ -22,7 +22,7 @@ fun ExifInterface.getMap(): MutableMap<String, String> {
     return map
 }
 
-fun convertDecimalToDegrees(decimal: Double): String {
+fun ExifInterface.convertDecimalToDegrees(decimal: Double): String {
     var latitude = Math.abs(decimal)
     val degree = latitude.toInt()
     latitude *= 60

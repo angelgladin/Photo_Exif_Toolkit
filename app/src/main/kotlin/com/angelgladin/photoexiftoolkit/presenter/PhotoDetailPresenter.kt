@@ -8,12 +8,13 @@ import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.domain.ExifField
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
+import com.angelgladin.photoexiftoolkit.domain.Location
 import com.angelgladin.photoexiftoolkit.domain.Type
-import com.angelgladin.photoexiftoolkit.extension.getMap
-import com.angelgladin.photoexiftoolkit.extension.getSize
+import com.angelgladin.photoexiftoolkit.extension.*
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import java.io.File
+import java.io.IOException
 
 /**
  * Created on 12/22/16.
@@ -21,6 +22,7 @@ import java.io.File
 class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<BaseView> {
 
     lateinit var exifTagsContainerList: List<ExifTagsContainer>
+    lateinit var exifInterface: ExifInterface
 
     override fun initialize() {
     }
@@ -28,7 +30,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     fun getDataFromIntent(intent: Intent) {
         val filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
 
-        val exifInterface = ExifInterface(filePath)
+        exifInterface = ExifInterface(filePath)
         Log.e(this.javaClass.simpleName, filePath)
         exifTagsContainerList = transformList(exifInterface.getMap())
 
@@ -62,11 +64,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                     datesList.add(ExifField(it.key, it.value))
 
                 it.key == ExifInterface.TAG_MAKE
-                        || it.key == ExifInterface.TAG_MODEL
-                        || it.key == ExifInterface.TAG_F_NUMBER
-                        || it.key == ExifInterface.TAG_EXPOSURE_TIME
-                        || it.key == ExifInterface.TAG_ISO_SPEED_RATINGS
-                        || it.key == ExifInterface.TAG_FLASH ->
+                        || it.key == ExifInterface.TAG_MODEL ->
                     cameraPropertiesList.add(ExifField(it.key, it.value))
 
                 it.key == ExifInterface.TAG_IMAGE_LENGTH
@@ -76,7 +74,6 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                 else -> othersList.add(ExifField(it.key, it.value))
             }
         }
-
         return arrayListOf(ExifTagsContainer(locationsList, Type.LOCATION_DATA),
                 ExifTagsContainer(datesList, Type.DATE),
                 ExifTagsContainer(cameraPropertiesList, Type.CAMERA_PROPERTIES),
@@ -84,21 +81,14 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                 ExifTagsContainer(othersList, Type.OTHER))
     }
 
-    fun pressedItem(item: ExifTagsContainer) {
+    fun onItemPressed(item: ExifTagsContainer) {
         view.showAlertDialogWhenItemIsPressed(item)
     }
 
     fun copyDataToClipboard(item: ExifTagsContainer) = view.copyDataToClipboard(item)
 
-    fun editLocation(item: ExifTagsContainer) {
-
-    }
 
     fun editDate(item: ExifTagsContainer) {
-
-    }
-
-    fun editExifFieldsOpeningDialog(item: ExifTagsContainer) {
 
     }
 
@@ -114,8 +104,20 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         view.shareData(s.substring(3, s.length - 1))
     }
 
-    fun clearExif() {
-        //TODO:
+
+    fun changeLocation(location: Location) {
+        try {
+            exifInterface.apply {
+                setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, exifInterface.getLatitudeRef(location.latitude))
+                setAttribute(ExifInterface.TAG_GPS_LATITUDE, exifInterface.convertDecimalToDegrees(location.latitude))
+                setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, exifInterface.getLongitudeRef(location.longitude))
+                setAttribute(ExifInterface.TAG_GPS_LONGITUDE, exifInterface.convertDecimalToDegrees(location.longitude))
+            }
+            exifInterface.saveAttributes()
+            view.onCompleteLocationChanged()
+        } catch (e: IOException) {
+            view.onError("Cannot change location data", e)
+        }
     }
 
 }
