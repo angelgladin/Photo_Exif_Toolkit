@@ -15,7 +15,9 @@ import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * Created on 12/22/16.
@@ -59,20 +61,16 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                 it.key == Constants.EXIF_LATITUDE
                         || it.key == Constants.EXIF_LONGITUDE ->
                     locationsList.add(ExifField(it.key, it.value))
-
                 it.key == ExifInterface.TAG_DATETIME
                         || it.key == ExifInterface.TAG_GPS_DATESTAMP
                         || it.key == ExifInterface.TAG_DATETIME_DIGITIZED ->
                     datesList.add(ExifField(it.key, it.value))
-
                 it.key == ExifInterface.TAG_MAKE
                         || it.key == ExifInterface.TAG_MODEL ->
                     cameraPropertiesList.add(ExifField(it.key, it.value))
-
                 it.key == ExifInterface.TAG_IMAGE_LENGTH
                         || it.key == ExifInterface.TAG_IMAGE_WIDTH ->
                     dimensionsList.add(ExifField(it.key, it.value))
-
                 else -> othersList.add(ExifField(it.key, it.value))
             }
         }
@@ -99,7 +97,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             month = calendar.get(Calendar.MONTH)
             day = calendar.get(Calendar.DAY_OF_MONTH)
         } else {
-            val date = item.list.firstOrNull()?.attribute!!
+            val date = item.list.first().attribute
             year = date.substring(0, 4).toInt()
             month = date.substring(5, 7).toInt() - 1
             day = date.substring(8, 10).toInt()
@@ -141,8 +139,51 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
     fun changeExifDate(year: Int, month: Int, dayOfMonth: Int) {
+        val locationExifContainerList = exifTagsContainerList.find { it.type == Type.DATE }?.list!!
+        val dateTimeShort: String
+        val dateTimeLong: String
 
+        if (locationExifContainerList.isEmpty()) {
+            val df = SimpleDateFormat("HH:mm:ss")
+            val calendar = Calendar.getInstance()
+            dateTimeLong = "$year:${appendZeroIfNeeded(month)}:${appendZeroIfNeeded(dayOfMonth)} ${df.format(calendar.time)}"
+            dateTimeShort = ""
+        } else {
+            val auxListLong = mutableListOf<ExifField>()
+            locationExifContainerList.forEach {
+                if (it.attribute.length > 10) auxListLong.add(it)
+            }
+            val actualDate = auxListLong.first().attribute.substring(11)
+            dateTimeLong = "$year:${appendZeroIfNeeded(month)}:${appendZeroIfNeeded(dayOfMonth)} $actualDate"
+            dateTimeShort = "$year:${appendZeroIfNeeded(month)}:${appendZeroIfNeeded(dayOfMonth)}"
+        }
+        try {
+            if (locationExifContainerList.isEmpty()) {
+                exifInterface.setAttribute(ExifInterface.TAG_DATETIME, dateTimeLong)
+            } else {
+                locationExifContainerList.forEach {
+                    if (it.attribute.length > 10)
+                        exifInterface.setAttribute(it.tag, dateTimeLong)
+                    else
+                        exifInterface.setAttribute(it.tag, dateTimeShort)
+                }
+            }
+            exifInterface.saveAttributes()
+
+            updateExifTagsContainerList()
+            view.changeExifDataList(exifTagsContainerList)
+
+            view.onCompleteDateChanged()
+        } catch (e: IOException) {
+            view.onError("Cannot change date", e)
+        }
     }
 
-
+    private fun appendZeroIfNeeded(n: Int): String {
+        val s = n.toString()
+        if (s.length == 1)
+            return "0$s"
+        else
+            return s
+    }
 }
