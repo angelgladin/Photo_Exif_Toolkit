@@ -14,7 +14,9 @@ interface PhotoDetailView : BaseView {
     fun showAlertDialogWhenItemIsPressed(item: ExifTagsContainer)
     fun copyDataToClipboard(item: ExifTagsContainer)
     fun openDialogMap(latitude: Double?, longitude: Double?)
+    fun showDialogEditDate(year: Int, month: Int, day: Int)
     fun shareData(data: String)
     fun onCompleteLocationChanged()
+    fun onCompleteDateChanged()
     fun onError(message: String, t: Throwable)
 }

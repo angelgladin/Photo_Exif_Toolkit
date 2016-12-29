@@ -1,5 +1,6 @@
 package com.angelgladin.photoexiftoolkit.activity
 
+import android.app.DatePickerDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.DatePicker
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.adapter.ExifFieldsAdapter
 import com.angelgladin.photoexiftoolkit.dialog.MapDialog
@@ -26,7 +28,8 @@ import kotlinx.android.synthetic.main.activity_photo_detail.*
 import kotlinx.android.synthetic.main.content_photo_detail.*
 
 
-class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.DialogEvents {
+class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDialog.OnDateSetListener,
+        MapDialog.DialogEvents {
 
     val presenter = PhotoDetailPresenter(this)
 
@@ -97,7 +100,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
             } else if (which == 1) {
                 if (item.type == Type.LOCATION_DATA)
                     presenter.openDialogMap(item)
-                else if (item.type == Type.LOCATION_DATA)
+                else if (item.type == Type.DATE)
                     presenter.editDate(item)
             }
         })
@@ -119,6 +122,11 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
         editNameDialogFragment.show(fm, "maps")
     }
 
+    override fun showDialogEditDate(year: Int, month: Int, day: Int) {
+        val datePickerDialog = DatePickerDialog(getContext(), this, year, month, day)
+        datePickerDialog.show()
+    }
+
     override fun shareData(data: String) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
@@ -128,7 +136,11 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
     }
 
     override fun onCompleteLocationChanged() {
-        coordinator_layout.showSnackbar("Location successfully changed")
+        coordinator_layout.showSnackbar("Location was successfully changed")
+    }
+
+    override fun onCompleteDateChanged() {
+        coordinator_layout.showSnackbar("Date was successfully changed")
     }
 
     override fun onError(message: String, t: Throwable) {
@@ -139,7 +151,12 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, MapDialog.Dial
     override fun locationChanged(locationChanged: Boolean, location: Location) {
         Log.e(this.javaClass.simpleName, "Location changed: $locationChanged, Location: $location")
         if (locationChanged)
-            presenter.changeLocation(location)
+            presenter.changeExifLocation(location)
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        Log.e(this.javaClass.simpleName, "Date was changed: year: $year  month: $month day: $dayOfMonth")
+        presenter.changeExifDate(year, month, dayOfMonth)
     }
 
 }

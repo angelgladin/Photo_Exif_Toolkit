@@ -15,6 +15,7 @@ import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 /**
  * Created on 12/22/16.
@@ -56,11 +57,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         map.forEach {
             when {
                 it.key == Constants.EXIF_LATITUDE
-                        || it.key == Constants.EXIF_LONGITUDE
-                        || it.key == ExifInterface.TAG_GPS_LATITUDE
-                        || it.key == ExifInterface.TAG_GPS_LATITUDE_REF
-                        || it.key == ExifInterface.TAG_GPS_LONGITUDE
-                        || it.key == ExifInterface.TAG_GPS_LONGITUDE_REF ->
+                        || it.key == Constants.EXIF_LONGITUDE ->
                     locationsList.add(ExifField(it.key, it.value))
 
                 it.key == ExifInterface.TAG_DATETIME
@@ -92,10 +89,24 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     fun copyDataToClipboard(item: ExifTagsContainer) = view.copyDataToClipboard(item)
 
-
     fun editDate(item: ExifTagsContainer) {
-
+        val year: Int
+        val month: Int
+        val day: Int
+        if (item.list.isEmpty()) {
+            val calendar = Calendar.getInstance()
+            year = calendar.get(Calendar.YEAR)
+            month = calendar.get(Calendar.MONTH)
+            day = calendar.get(Calendar.DAY_OF_MONTH)
+        } else {
+            val date = item.list.firstOrNull()?.attribute!!
+            year = date.substring(0, 4).toInt()
+            month = date.substring(5, 7).toInt() - 1
+            day = date.substring(8, 10).toInt()
+        }
+        view.showDialogEditDate(year, month, day)
     }
+
 
     fun openDialogMap(item: ExifTagsContainer) {
         val latitude = item.list.find { it.tag == Constants.EXIF_LATITUDE }?.attribute?.toDouble()
@@ -110,7 +121,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
 
-    fun changeLocation(location: Location) {
+    fun changeExifLocation(location: Location) {
         try {
             exifInterface.apply {
                 setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, exifInterface.getLatitudeRef(location.latitude))
@@ -127,6 +138,10 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         } catch (e: IOException) {
             view.onError("Cannot change location data", e)
         }
+    }
+
+    fun changeExifDate(year: Int, month: Int, dayOfMonth: Int) {
+
     }
 
 
