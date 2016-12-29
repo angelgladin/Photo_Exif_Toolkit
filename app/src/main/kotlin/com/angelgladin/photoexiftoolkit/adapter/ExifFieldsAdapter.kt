@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_exif_data.view.*
 /**
  * Created on 12/22/16.
  */
-class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: PhotoDetailPresenter) : RecyclerView.Adapter<ExifFieldsAdapter.ViewHolder>() {
+class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: PhotoDetailPresenter) : RecyclerView.Adapter<ExifFieldsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_exif_data, parent, false)
@@ -25,6 +25,10 @@ class ExifFieldsAdapter(val exifList: List<ExifTagsContainer>, val presenter: Ph
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
             holder.bind(exifList[position], presenter)
 
+    fun updateList(exifList: List<ExifTagsContainer>) {
+        this.exifList = exifList
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

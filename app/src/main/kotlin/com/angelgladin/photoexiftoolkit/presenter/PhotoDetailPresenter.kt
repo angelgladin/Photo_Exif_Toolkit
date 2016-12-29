@@ -23,22 +23,27 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     lateinit var exifTagsContainerList: List<ExifTagsContainer>
     lateinit var exifInterface: ExifInterface
+    lateinit var filePath: String
 
     override fun initialize() {
     }
 
     fun getDataFromIntent(intent: Intent) {
-        val filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
-
-        exifInterface = ExifInterface(filePath)
+        filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
         Log.e(this.javaClass.simpleName, filePath)
-        exifTagsContainerList = transformList(exifInterface.getMap())
+
+        updateExifTagsContainerList()
 
         val imageUri = Uri.fromFile(File(filePath))
         val file = File(filePath)
         view.setImage(file.name, file.getSize(), imageUri)
 
         view.setExifDataList(exifTagsContainerList)
+    }
+
+    private fun updateExifTagsContainerList() {
+        exifInterface = ExifInterface(filePath)
+        exifTagsContainerList = transformList(exifInterface.getMap())
     }
 
     private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
@@ -114,10 +119,15 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                 setAttribute(ExifInterface.TAG_GPS_LONGITUDE, exifInterface.convertDecimalToDegrees(location.longitude))
             }
             exifInterface.saveAttributes()
+
+            updateExifTagsContainerList()
+            view.changeExifDataList(exifTagsContainerList)
+
             view.onCompleteLocationChanged()
         } catch (e: IOException) {
             view.onError("Cannot change location data", e)
         }
     }
+
 
 }
