@@ -10,6 +10,7 @@ import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 interface PhotoDetailView : BaseView {
     fun setImage(fileName: String, fileSize: String, imageUri: Uri)
     fun setExifDataList(list: List<ExifTagsContainer>)
+    fun showAddressOnRecyclerViewItem(address: String)
     fun changeExifDataList(list: List<ExifTagsContainer>)
     fun showAlertDialogWhenItemIsPressed(item: ExifTagsContainer)
     fun copyDataToClipboard(item: ExifTagsContainer)

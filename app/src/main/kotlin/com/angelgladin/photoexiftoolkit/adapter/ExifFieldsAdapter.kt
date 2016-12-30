@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.item_exif_data.view.*
  */
 class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: PhotoDetailPresenter) : RecyclerView.Adapter<ExifFieldsAdapter.ViewHolder>() {
 
+    val viewHolderReferenceList = mutableListOf<ViewHolder>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_exif_data, parent, false)
         return ViewHolder(view)
@@ -22,12 +24,18 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
 
     override fun getItemCount(): Int = exifList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-            holder.bind(exifList[position], presenter)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        viewHolderReferenceList.add(holder)
+        holder.bind(exifList[position], presenter)
+    }
 
     fun updateList(exifList: List<ExifTagsContainer>) {
         this.exifList = exifList
         notifyDataSetChanged()
+    }
+
+    fun setAddress(address: String) {
+        viewHolderReferenceList[0].setAddress(address)
     }
 
 
@@ -59,6 +67,12 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
                 }
             }
         }
+
+        fun setAddress(address: String) {
+            itemView.text_address.visibility = View.VISIBLE
+            itemView.text_address.text = address
+        }
     }
 
 }
+

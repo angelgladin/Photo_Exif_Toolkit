@@ -80,6 +80,10 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         recycler_view.adapter = recyclerViewAdapter
     }
 
+    override fun showAddressOnRecyclerViewItem(address: String) {
+        recyclerViewAdapter.setAddress(address)
+    }
+
     override fun changeExifDataList(list: List<ExifTagsContainer>) {
         recyclerViewAdapter.updateList(list)
     }
