@@ -148,18 +148,18 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
     }
 
     override fun onError(message: String, t: Throwable) {
-        t.printStackTrace()
+        Log.e(this.javaClass.simpleName, "${t.cause} - ${t.message}")
         coordinator_layout.showSnackbar(message)
     }
 
     override fun locationChanged(locationChanged: Boolean, location: Location) {
-        Log.e(this.javaClass.simpleName, "Location changed: $locationChanged, Location: $location")
+        Log.d(this.javaClass.simpleName, "Location changed: $locationChanged, Location: $location")
         if (locationChanged)
             presenter.changeExifLocation(location)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        Log.e(this.javaClass.simpleName, "Date was changed: year: $year  month: $month day: $dayOfMonth")
+        Log.d(this.javaClass.simpleName, "Date was changed: year: $year  month: $month day: $dayOfMonth")
         presenter.changeExifDate(year, month, dayOfMonth)
     }
 

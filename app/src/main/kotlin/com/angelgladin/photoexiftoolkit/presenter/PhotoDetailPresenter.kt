@@ -41,7 +41,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     fun getDataFromIntent(intent: Intent) {
         filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
-        Log.e(this.javaClass.simpleName, filePath)
+        Log.d(this.javaClass.simpleName, filePath)
 
         updateExifTagsContainerList()
 
@@ -68,7 +68,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                         }
 
                         override fun onNext(t: AddressResponse) {
-                            Log.e(this.javaClass.simpleName, t.resultList.first().formattedAddress)
+                            Log.d(this.javaClass.simpleName, t.resultList.first().formattedAddress)
                             view.showAddressOnRecyclerViewItem(t.resultList.first().formattedAddress)
                         }
 
