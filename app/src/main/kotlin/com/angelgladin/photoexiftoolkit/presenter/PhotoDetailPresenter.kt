@@ -55,8 +55,8 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
     private fun getAddressByTriggerRequest() {
-        view.showProgressDialog()
         if (latitude != null && longitude != null) {
+        view.showProgressDialog()
             GoogleMapsService
                     .googleMapsApi
                     .getAddressObservable("$latitude,$longitude")
