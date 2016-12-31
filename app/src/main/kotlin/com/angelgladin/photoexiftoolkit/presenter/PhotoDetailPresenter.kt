@@ -6,6 +6,8 @@ import android.net.Uri
 import android.util.Log
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
+import com.angelgladin.photoexiftoolkit.data.GoogleMapsService
+import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
 import com.angelgladin.photoexiftoolkit.domain.ExifField
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.domain.Location
@@ -13,6 +15,9 @@ import com.angelgladin.photoexiftoolkit.domain.Type
 import com.angelgladin.photoexiftoolkit.extension.*
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -28,6 +33,9 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     lateinit var exifInterface: ExifInterface
     lateinit var filePath: String
 
+    var latitude: Double? = null
+    var longitude: Double? = null
+
     override fun initialize() {
     }
 
@@ -42,11 +50,42 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         view.setImage(file.name, file.getSize(), imageUri)
 
         view.setExifDataList(exifTagsContainerList)
+
+        getAddressByTriggerRequest()
+    }
+
+    private fun getAddressByTriggerRequest() {
+        if (latitude != null && longitude != null) {
+            GoogleMapsService
+                    .googleMapsApi
+                    .getAddressObservable("$latitude,$longitude")
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Subscriber<AddressResponse>() {
+                        override fun onError(e: Throwable) {
+                            Log.e(this.javaClass.simpleName, e.message)
+                            view.onError("Something went wrong getting the address", e)
+                        }
+
+                        override fun onNext(t: AddressResponse) {
+                            Log.e(this.javaClass.simpleName, t.resultList.first().formattedAddress)
+                            view.showAddressOnRecyclerViewItem(t.resultList.first().formattedAddress)
+                        }
+
+                        override fun onCompleted() {
+
+                        }
+                    })
+        }
     }
 
     private fun updateExifTagsContainerList() {
         exifInterface = ExifInterface(filePath)
-        exifTagsContainerList = transformList(exifInterface.getMap())
+        val map = exifInterface.getMap()
+        exifTagsContainerList = transformList(map)
+
+        latitude = map[Constants.EXIF_LATITUDE]?.toDouble()
+        longitude = map[Constants.EXIF_LONGITUDE]?.toDouble()
     }
 
     private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
@@ -132,6 +171,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             updateExifTagsContainerList()
             view.changeExifDataList(exifTagsContainerList)
 
+            getAddressByTriggerRequest()
             view.onCompleteLocationChanged()
         } catch (e: IOException) {
             view.onError("Cannot change location data", e)
