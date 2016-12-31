@@ -1,6 +1,7 @@
 package com.angelgladin.photoexiftoolkit.activity
 
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -33,6 +34,13 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
 
     val presenter = PhotoDetailPresenter(this)
 
+    val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(this).apply {
+            setMessage("Getting the address")
+            setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            isIndeterminate = true
+        }
+    }
     lateinit var recyclerViewAdapter: ExifFieldsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +90,14 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
 
     override fun showAddressOnRecyclerViewItem(address: String) {
         recyclerViewAdapter.setAddress(address)
+    }
+
+    override fun showProgressDialog() {
+        progressDialog.show()
+    }
+
+    override fun hideProgressDialog() {
+        progressDialog.dismiss()
     }
 
     override fun changeExifDataList(list: List<ExifTagsContainer>) {

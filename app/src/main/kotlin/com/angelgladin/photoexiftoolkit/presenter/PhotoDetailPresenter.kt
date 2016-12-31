@@ -55,6 +55,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
     private fun getAddressByTriggerRequest() {
+        view.showProgressDialog()
         if (latitude != null && longitude != null) {
             GoogleMapsService
                     .googleMapsApi
@@ -65,6 +66,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                         override fun onError(e: Throwable) {
                             Log.e(this.javaClass.simpleName, e.message)
                             view.onError("Something went wrong getting the address", e)
+                            view.hideProgressDialog()
                         }
 
                         override fun onNext(t: AddressResponse) {
@@ -73,7 +75,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                         }
 
                         override fun onCompleted() {
-
+                            view.hideProgressDialog()
                         }
                     })
         }
