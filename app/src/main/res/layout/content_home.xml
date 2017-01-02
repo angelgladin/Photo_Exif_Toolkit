@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="@dimen/home_activity_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_home">
 
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="#45B2A8"
+        app:cardBackgroundColor="@color/gallery_item_card"
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardUseCompatPadding="true">
@@ -24,19 +24,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp">
+            android:layout_margin="@dimen/margin_inner_element_card_view">
 
             <ImageView
                 android:id="@+id/image_action"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="@dimen/image_gallery_dimension"
+                android:layout_height="@dimen/image_gallery_dimension"
                 app:srcCompat="@drawable/ic_photo_library_black_24dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="@dimen/margin_inner_element_card_view"
                 android:layout_toEndOf="@+id/image_action"
                 android:orientation="vertical">
 
@@ -46,13 +46,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/photo_from_gallery"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_title" />
 
                 <TextView
                     android:id="@+id/text_action_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/lorem_ipsum"
+                    android:text="@string/photo_from_gallery_description"
                     android:textColor="@android:color/white" />
             </LinearLayout>
 

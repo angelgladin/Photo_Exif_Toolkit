@@ -6,9 +6,8 @@
     <string name="not_implemented_yet">Not implemented yet :p</string>
     <string name="text_copied_to_clipboard">Text successfully copied to clipboard</string>
     <string name="photo_from_gallery">Photo From Gallery</string>
-    <string name="file_picker">File Picker</string>
+    <string name="photo_from_gallery_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="photo_from_url">Photo From URL</string>
 
     <string name="dialog_maps_title">Location</string>
 

@@ -40,13 +40,12 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher"
             />
         <LinearLayout
             android:id="@+id/container_text_image_info"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#80000000"
+            android:background="@color/transparentBlack"
             >
 
           <TextView
