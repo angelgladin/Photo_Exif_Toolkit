@@ -6,12 +6,12 @@
         android:id="@+id/action_about_app"
         android:icon="@drawable/ic_info_outline_black_24dp"
         android:orderInCategory="1"
-        android:title="About the app"
+        android:title="@string/about_the_app"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_about_developer"
         android:icon="@drawable/ic_person_black_24dp"
         android:orderInCategory="2"
-        android:title="About developer"
+        android:title="@string/about_developer"
         app:showAsAction="always" />
 </menu>

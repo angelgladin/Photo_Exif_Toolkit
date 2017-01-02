@@ -22,4 +22,10 @@
     <string name="alert_item_edit">Edit</string>
     <string name="alert_item_open_map">Open map</string>
 
+    <string name="permission_rationale_message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="about_the_app">About the app</string>
+    <string name="about_developer">About developer</string>
+    <string name="done_editing">Done editing</string>
+    <string name="edit_locations">Edit locations</string>
+    <string name="share">Share</string>
 </resources>
