@@ -6,10 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="12dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_home">
 
@@ -19,7 +16,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="#179F92"
+        app:cardBackgroundColor="#45B2A8"
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardUseCompatPadding="true">
@@ -62,108 +59,5 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view_from_file_picker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="#45B2A8"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="6dp"
-        app:cardUseCompatPadding="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp">
-
-            <ImageView
-                android:id="@+id/image_type"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_folder_open_black_24dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="12dp"
-                android:layout_toEndOf="@+id/image_type"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/file_picker"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/text_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lorem_ipsum"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-
-    </android.support.v7.widget.CardView>
-
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view_from_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="#73C5BE"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="6dp"
-        app:cardUseCompatPadding="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp">
-
-            <ImageView
-                android:id="@+id/image_action_url"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_public_black_24dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="12dp"
-                android:layout_toEndOf="@+id/image_action_url"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/text_action_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/photo_from_url"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/text_action_description_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lorem_ipsum"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
 
 </LinearLayout>
