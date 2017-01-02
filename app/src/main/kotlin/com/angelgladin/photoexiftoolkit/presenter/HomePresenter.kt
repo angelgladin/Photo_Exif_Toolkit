@@ -13,13 +13,9 @@ class HomePresenter(override val view: HomeView) : BasePresenter<BaseView> {
 
     fun getPhotoFromGallery() = view.openGallery()
 
-    fun getPhotoFromUrl() = view.openUrlDialog()
-
     fun aboutDeveloper() = view.showAboutDeveloperDialog()
 
     fun aboutApp() = view.showAboutAppDialog()
-
-    fun getPhotoFromFilePicker() = view.openFilePicker()
 
     fun launchPhotoDetailActivity(pathFile: String?) = view.launchPhotoDetailActivity(pathFile)
 }
