@@ -4,6 +4,7 @@ import android.content.Intent
 import android.media.ExifInterface
 import android.net.Uri
 import android.util.Log
+import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
 import com.angelgladin.photoexiftoolkit.data.GoogleMapsService
@@ -56,7 +57,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     private fun getAddressByTriggerRequest() {
         if (latitude != null && longitude != null) {
-        view.showProgressDialog()
+            view.showProgressDialog()
             GoogleMapsService
                     .googleMapsApi
                     .getAddressObservable("$latitude,$longitude")
@@ -65,7 +66,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                     .subscribe(object : Subscriber<AddressResponse>() {
                         override fun onError(e: Throwable) {
                             Log.e(this.javaClass.simpleName, e.message)
-                            view.onError("Something went wrong getting the address", e)
+                            view.onError(view.getContext().resources.getString(R.string.location_changed_message_error), e)
                             view.hideProgressDialog()
                         }
 
@@ -176,7 +177,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             getAddressByTriggerRequest()
             view.onCompleteLocationChanged()
         } catch (e: IOException) {
-            view.onError("Cannot change location data", e)
+            view.onError(view.getContext().resources.getString(R.string.location_changed_message_error), e)
         }
     }
 
@@ -217,7 +218,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
             view.onCompleteDateChanged()
         } catch (e: IOException) {
-            view.onError("Cannot change date", e)
+            view.onError(view.getContext().resources.getString(R.string.date_changed_message_error), e)
         }
     }
 

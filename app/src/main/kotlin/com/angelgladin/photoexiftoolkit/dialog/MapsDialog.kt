@@ -65,7 +65,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
         try {
-            dialogEvents = (activity as? DialogEvents)!!
+            dialogEvents = activity as DialogEvents
         } catch (e: ClassCastException) {
             throw ClassCastException(activity.toString() + " must implement DialogEvents")
         }
@@ -112,7 +112,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     override fun onMapClick(latLng: LatLng) {
         if (editModeLocation) {
-            Log.e(this.javaClass.simpleName, "Latitude ${latLng.latitude} -- Longitude ${latLng.longitude}")
+            Log.d(this.javaClass.simpleName, "Latitude ${latLng.latitude} -- Longitude ${latLng.longitude}")
             marker.remove()
             addMarker(latLng)
         }
@@ -120,7 +120,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     private fun editLocation() {
         editModeLocation = true
-        toolbar.title = "Tap for new location"
+        toolbar.title = resources.getString(R.string.dialog_maps_title_tap_for_new_location)
         toolbar.menu.findItem(R.id.action_edit_location).isVisible = false
         toolbar.menu.findItem(R.id.action_done_editing).isVisible = true
     }
@@ -135,7 +135,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
 
     private fun showAlertDialog() {
         AlertDialog.Builder(context)
-                .setTitle("Edit location")
+                .setTitle(resources.getString(R.string.dialog_maps_title_edit_location))
                 .setMessage(resources.getString(R.string.lorem_ipsum))
                 .setPositiveButton(resources.getString(android.R.string.ok),
                         { dialogInterface, i ->

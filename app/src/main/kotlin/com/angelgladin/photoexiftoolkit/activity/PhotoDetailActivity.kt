@@ -36,7 +36,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
 
     val progressDialog: ProgressDialog by lazy {
         ProgressDialog(this).apply {
-            setMessage("Getting the address")
+            setMessage(context.resources.getString(R.string.progress_dialog_address_loading))
             setProgressStyle(ProgressDialog.STYLE_SPINNER)
             isIndeterminate = true
         }
@@ -133,7 +133,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         val clip = ClipData.newPlainText(item.type.name, item.getOnStringProperties())
         clipboard.primaryClip = clip
 
-        coordinator_layout.showSnackbar(R.string.text_copied_to_clipboard)
+        coordinator_layout.showSnackbar(R.string.text_copied_to_clipboard_message)
     }
 
     override fun openDialogMap(latitude: Double?, longitude: Double?) {
@@ -156,11 +156,11 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
     }
 
     override fun onCompleteLocationChanged() {
-        coordinator_layout.showSnackbar("Location was successfully changed")
+        coordinator_layout.showSnackbar(R.string.location_changed_message)
     }
 
     override fun onCompleteDateChanged() {
-        coordinator_layout.showSnackbar("Date was successfully changed")
+        coordinator_layout.showSnackbar(R.string.date_changed_message)
     }
 
     override fun onError(message: String, t: Throwable) {
