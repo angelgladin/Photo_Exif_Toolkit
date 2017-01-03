@@ -1,3 +1,48 @@
 <resources>
-  <string name="app_name">Photo EXIF Toolkit</string>
+    <string name="app_name">Photo EXIF Toolkit</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="not_implemented_yet">Not implemented yet :p</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+
+    <string name="about_the_app">About the app</string>
+    <string name="about_developer">About the developer</string>
+
+    <string name="photo_from_gallery">Photo From Gallery</string>
+    <string name="permission_rationale_message">These permissions are required for viewing EXIF data.</string>
+    <string name="photo_from_gallery_description">Choose an image from gallery for displaying all available EXIF data.</string>
+
+
+    <string name="progress_dialog_address_loading">Getting the address</string>
+
+    <string name="share_menu_item">Share</string>
+
+    <string name="item_location">Location</string>
+    <string name="item_date">Date</string>
+    <string name="item_camera_properties">Camera properties</string>
+    <string name="item_dimension">Dimension</string>
+    <string name="item_other">Other</string>
+
+    <string name="alert_select_an_action">Select an action</string>
+    <string name="alert_item_copy_to_clipboard">Copy to clipboard</string>
+    <string name="alert_item_edit">Edit</string>
+    <string name="alert_item_open_map">Open map</string>
+
+    <string name="text_copied_to_clipboard_message">Text successfully copied to clipboard</string>
+    <string name="location_changed_message">Location was successfully changed</string>
+    <string name="date_changed_message">Date was successfully changed</string>
+
+    <string name="getting_address_error">Something went wrong getting the address</string>
+    <string name="date_changed_message_error">Cannot change location data</string>
+    <string name="location_changed_message_error">Cannot change date</string>
+
+    <string name="edit_location_menu_item">Edit location</string>
+    <string name="done_editing_menu_item">Done editing</string>
+
+    <string name="dialog_maps_title">Location</string>
+    <string name="dialog_maps_title_edit_location">Edit location</string>
+    <string name="dialog_maps_title_tap_for_new_location">Tap for new location</string>
+
+    <string name="dialog_maps_title_edit_location_message">Are you sure you want to set this new location?</string>
+
 </resources>
