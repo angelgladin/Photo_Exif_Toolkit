@@ -43,4 +43,6 @@
     <string name="dialog_maps_title_edit_location">Edit location</string>
     <string name="dialog_maps_title_tap_for_new_location">Tap for new location</string>
 
+    <string name="dialog_maps_title_edit_location_message">Are you sure you want to set this new location?</string>
+
 </resources>

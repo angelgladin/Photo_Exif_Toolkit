@@ -136,7 +136,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
     private fun showAlertDialog() {
         AlertDialog.Builder(context)
                 .setTitle(resources.getString(R.string.dialog_maps_title_edit_location))
-                .setMessage(resources.getString(R.string.lorem_ipsum))
+                .setMessage(resources.getString(R.string.dialog_maps_title_edit_location_message))
                 .setPositiveButton(resources.getString(android.R.string.ok),
                         { dialogInterface, i ->
                             locationChanged = true
