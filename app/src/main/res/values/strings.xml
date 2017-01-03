@@ -9,8 +9,8 @@
     <string name="about_developer">About the developer</string>
 
     <string name="photo_from_gallery">Photo From Gallery</string>
-    <string name="permission_rationale_message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="photo_from_gallery_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="permission_rationale_message">These permissions are required for viewing EXIF data.</string>
+    <string name="photo_from_gallery_description">Choose an image from gallery for displaying all available EXIF data.</string>
 
 
     <string name="progress_dialog_address_loading">Getting the address</string>
@@ -36,7 +36,7 @@
     <string name="date_changed_message_error">Cannot change location data</string>
     <string name="location_changed_message_error">Cannot change date</string>
 
-    <string name="edit_location_menu_item">Edit locations</string>
+    <string name="edit_location_menu_item">Edit location</string>
     <string name="done_editing_menu_item">Done editing</string>
 
     <string name="dialog_maps_title">Location</string>
