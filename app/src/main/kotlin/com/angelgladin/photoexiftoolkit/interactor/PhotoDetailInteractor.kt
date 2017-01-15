@@ -18,17 +18,23 @@
  */
 
 
-package com.angelgladin.photoexiftoolkit.data
+package com.angelgladin.photoexiftoolkit.interactor
 
+import com.angelgladin.photoexiftoolkit.data.GoogleMapsClient
 import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 /**
- * Created on 12/30/16.
+ * Created on 1/14/17.
  */
-interface GoogleMapsService {
-    @GET(ApiConstants.ADDRESS_URL)
-    fun getAddress(@Query(ApiConstants.LATLNG_QUERY) latlng: String): Observable<AddressResponse>
+object PhotoDetailInteractor {
+    fun getAddress(latitude: Double, longitude: Double): Observable<AddressResponse> {
+        return GoogleMapsClient
+                .service
+                .getAddress("$latitude,$longitude")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 }
