@@ -20,15 +20,22 @@
 
 package com.angelgladin.photoexiftoolkit.data
 
-import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
-import rx.Observable
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Created on 12/30/16.
  */
-interface GoogleMapsApi {
-    @GET(ApiConstants.ADDRESS_URL)
-    fun getAddressObservable(@Query(ApiConstants.LATLNG_QUERY) latlng: String): Observable<AddressResponse>
+object GoogleMapsClient {
+    val service: GoogleMapsService
+
+    init {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(ApiConstants.BASE_URL)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        service = retrofit.create(GoogleMapsService::class.java)
+    }
 }
