@@ -21,14 +21,14 @@
 package com.angelgladin.photoexiftoolkit.data
 
 import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import rx.Observable
 
 /**
  * Created on 12/30/16.
  */
 interface GoogleMapsService {
     @GET(ApiConstants.ADDRESS_URL)
-    fun getAddress(@Query(ApiConstants.LATLNG_QUERY) latlng: String): Observable<AddressResponse>
+    fun getAddress(@Query(ApiConstants.LATLNG_QUERY) latlng: String): Call<AddressResponse>
 }

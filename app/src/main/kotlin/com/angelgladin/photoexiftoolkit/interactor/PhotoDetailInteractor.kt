@@ -22,19 +22,15 @@ package com.angelgladin.photoexiftoolkit.interactor
 
 import com.angelgladin.photoexiftoolkit.data.GoogleMapsClient
 import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import retrofit2.Call
 
 /**
  * Created on 1/14/17.
  */
 object PhotoDetailInteractor {
-    fun getAddress(latitude: Double, longitude: Double): Observable<AddressResponse> {
+    fun getAddress(latitude: Double, longitude: Double): Call<AddressResponse> {
         return GoogleMapsClient
                 .service
                 .getAddress("$latitude,$longitude")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 }

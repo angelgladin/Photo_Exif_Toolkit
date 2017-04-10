@@ -70,7 +70,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar_layout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
 
-        presenter.getDataFromIntent(intent)
+        presenter.initialize(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

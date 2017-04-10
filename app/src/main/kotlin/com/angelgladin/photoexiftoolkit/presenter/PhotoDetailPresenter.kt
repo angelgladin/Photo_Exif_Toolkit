@@ -36,7 +36,9 @@ import com.angelgladin.photoexiftoolkit.extension.*
 import com.angelgladin.photoexiftoolkit.interactor.PhotoDetailInteractor
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
-import rx.Subscriber
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -58,51 +60,54 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     override fun initialize() {
     }
 
-    fun getDataFromIntent(intent: Intent) {
+    fun initialize(intent: Intent) {
         filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
-        Log.d(this.javaClass.simpleName, filePath)
-
-        updateExifTagsContainerList()
-
-        val imageUri = Uri.fromFile(File(filePath))
-        val file = File(filePath)
-        view.setImage(file.name, file.getSize(), imageUri)
-
-        view.setExifDataList(exifTagsContainerList)
-
+        computeTags()
+        setImageByGivenAPath()
+        populateExifProperties()
         getAddressByTriggerRequest()
     }
 
-    private fun getAddressByTriggerRequest() {
-        if (latitude != null && longitude != null) {
-            view.showProgressDialog()
-            PhotoDetailInteractor.getAddress(latitude!!, longitude!!)
-                    .subscribe(object : Subscriber<AddressResponse>() {
-                        override fun onError(e: Throwable) {
-                            Log.e(this.javaClass.simpleName, e.message)
-                            view.onError(view.getContext().resources.getString(R.string.getting_address_error), e)
-                            view.hideProgressDialog()
-                        }
-
-                        override fun onNext(t: AddressResponse) {
-                            Log.d(this.javaClass.simpleName, t.resultList.first().formattedAddress)
-                            view.showAddressOnRecyclerViewItem(t.resultList.first().formattedAddress)
-                        }
-
-                        override fun onCompleted() {
-                            view.hideProgressDialog()
-                        }
-                    })
-        }
-    }
-
-    private fun updateExifTagsContainerList() {
+    private fun computeTags() {
         exifInterface = ExifInterface(filePath)
         val map = exifInterface.getMap()
         exifTagsContainerList = transformList(map)
 
         latitude = map[Constants.EXIF_LATITUDE]?.toDouble()
         longitude = map[Constants.EXIF_LONGITUDE]?.toDouble()
+    }
+
+    private fun populateExifProperties() {
+        view.setExifDataList(exifTagsContainerList)
+    }
+
+    private fun setImageByGivenAPath() {
+        Log.d(this.javaClass.simpleName, filePath)
+        val imageUri = Uri.fromFile(File(filePath))
+        val file = File(filePath)
+        view.setImage(file.name, file.getSize(), imageUri)
+    }
+
+    private fun getAddressByTriggerRequest() {
+        if (latitude != null && longitude != null) {
+            view.showProgressDialog()
+            PhotoDetailInteractor.getAddress(latitude!!, longitude!!)
+                    .enqueue(object : Callback<AddressResponse> {
+                        override fun onResponse(call: Call<AddressResponse>?, response: Response<AddressResponse>?) {
+                            val result = response!!.body()
+                            Log.d(this.javaClass.simpleName, result.resultList.first().formattedAddress)
+                            view.showAddressOnRecyclerViewItem(result.resultList.first().formattedAddress)
+                            view.hideProgressDialog()
+                        }
+
+                        override fun onFailure(call: Call<AddressResponse>?, t: Throwable?) {
+                            Log.e(this.javaClass.simpleName, t!!.message)
+                            view.onError(view.getContext().resources.getString(R.string.getting_address_error), t)
+                            view.hideProgressDialog()
+                        }
+                    })
+
+        }
     }
 
     private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
@@ -113,19 +118,19 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         val othersList = arrayListOf<ExifField>()
 
         map.forEach {
-            when {
-                it.key == Constants.EXIF_LATITUDE
-                        || it.key == Constants.EXIF_LONGITUDE ->
+            when (it.key) {
+                Constants.EXIF_LATITUDE
+                    , Constants.EXIF_LONGITUDE ->
                     locationsList.add(ExifField(it.key, it.value))
-                it.key == ExifInterface.TAG_DATETIME
-                        || it.key == ExifInterface.TAG_GPS_DATESTAMP
-                        || it.key == ExifInterface.TAG_DATETIME_DIGITIZED ->
+                ExifInterface.TAG_DATETIME
+                    , ExifInterface.TAG_GPS_DATESTAMP
+                    , ExifInterface.TAG_DATETIME_DIGITIZED ->
                     datesList.add(ExifField(it.key, it.value))
-                it.key == ExifInterface.TAG_MAKE
-                        || it.key == ExifInterface.TAG_MODEL ->
+                ExifInterface.TAG_MAKE
+                    , ExifInterface.TAG_MODEL ->
                     cameraPropertiesList.add(ExifField(it.key, it.value))
-                it.key == ExifInterface.TAG_IMAGE_LENGTH
-                        || it.key == ExifInterface.TAG_IMAGE_WIDTH ->
+                ExifInterface.TAG_IMAGE_LENGTH
+                    , ExifInterface.TAG_IMAGE_WIDTH ->
                     dimensionsList.add(ExifField(it.key, it.value))
                 else -> othersList.add(ExifField(it.key, it.value))
             }
@@ -185,7 +190,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             }
             exifInterface.saveAttributes()
 
-            updateExifTagsContainerList()
+            computeTags()
             view.changeExifDataList(exifTagsContainerList)
 
             getAddressByTriggerRequest()
@@ -227,7 +232,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             }
             exifInterface.saveAttributes()
 
-            updateExifTagsContainerList()
+            computeTags()
             view.changeExifDataList(exifTagsContainerList)
 
             view.onCompleteDateChanged()
