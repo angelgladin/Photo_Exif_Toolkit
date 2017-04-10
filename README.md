@@ -24,7 +24,6 @@ The app follows MVP pattern. For more details read this [post](https://antoniole
 * [Glide](https://github.com/bumptech/glide)
 * [Retrofit 2](https://square.github.io/retrofit/)
 * [Gson](https://github.com/google/gson)
-* [RxJava & RxAndroid](https://github.com/ReactiveX/RxAndroid)
 * [Dexter](https://github.com/Karumi/Dexter)
 
 ## To do
