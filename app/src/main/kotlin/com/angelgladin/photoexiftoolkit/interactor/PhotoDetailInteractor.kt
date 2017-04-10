@@ -23,14 +23,28 @@ package com.angelgladin.photoexiftoolkit.interactor
 import com.angelgladin.photoexiftoolkit.data.GoogleMapsClient
 import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Created on 1/14/17.
  */
 object PhotoDetailInteractor {
-    fun getAddress(latitude: Double, longitude: Double): Call<AddressResponse> {
-        return GoogleMapsClient
+    fun getAddress(latitude: Double, longitude: Double
+                   , onResponse: (formattedAddress: String) -> Unit
+                   , onFailure: (t: Throwable) -> Unit) {
+        GoogleMapsClient
                 .service
                 .getAddress("$latitude,$longitude")
+                .enqueue(object : Callback<AddressResponse> {
+                    override fun onFailure(call: Call<AddressResponse>?, t: Throwable) {
+                        onFailure(t)
+                    }
+
+                    override fun onResponse(call: Call<AddressResponse>?, response: Response<AddressResponse>) {
+                        onResponse(response.body().resultList.first().formattedAddress)
+                    }
+                })
     }
+
 }

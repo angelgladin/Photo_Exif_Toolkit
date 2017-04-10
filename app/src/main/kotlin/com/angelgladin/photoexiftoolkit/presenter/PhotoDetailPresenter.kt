@@ -27,7 +27,6 @@ import android.util.Log
 import com.angelgladin.photoexiftoolkit.R
 import com.angelgladin.photoexiftoolkit.common.BasePresenter
 import com.angelgladin.photoexiftoolkit.common.BaseView
-import com.angelgladin.photoexiftoolkit.data.domain.AddressResponse
 import com.angelgladin.photoexiftoolkit.domain.ExifField
 import com.angelgladin.photoexiftoolkit.domain.ExifTagsContainer
 import com.angelgladin.photoexiftoolkit.domain.Location
@@ -36,9 +35,6 @@ import com.angelgladin.photoexiftoolkit.extension.*
 import com.angelgladin.photoexiftoolkit.interactor.PhotoDetailInteractor
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -91,20 +87,16 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     private fun getAddressByTriggerRequest() {
         if (latitude != null && longitude != null) {
             view.showProgressDialog()
-            PhotoDetailInteractor.getAddress(latitude!!, longitude!!)
-                    .enqueue(object : Callback<AddressResponse> {
-                        override fun onResponse(call: Call<AddressResponse>?, response: Response<AddressResponse>?) {
-                            val result = response!!.body()
-                            Log.d(this.javaClass.simpleName, result.resultList.first().formattedAddress)
-                            view.showAddressOnRecyclerViewItem(result.resultList.first().formattedAddress)
-                            view.hideProgressDialog()
-                        }
-
-                        override fun onFailure(call: Call<AddressResponse>?, t: Throwable?) {
-                            Log.e(this.javaClass.simpleName, t!!.message)
-                            view.onError(view.getContext().resources.getString(R.string.getting_address_error), t)
-                            view.hideProgressDialog()
-                        }
+            PhotoDetailInteractor.getAddress(latitude!!, longitude!!,
+                    onResponse = {
+                        Log.d(this.javaClass.simpleName, it)
+                        view.showAddressOnRecyclerViewItem(it)
+                        view.hideProgressDialog()
+                    },
+                    onFailure = {
+                        Log.e(this.javaClass.simpleName, it.message)
+                        view.onError(view.getContext().resources.getString(R.string.getting_address_error), it)
+                        view.hideProgressDialog()
                     })
 
         }
