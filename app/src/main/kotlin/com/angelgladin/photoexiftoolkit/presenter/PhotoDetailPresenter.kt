@@ -60,19 +60,32 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     override fun initialize() {
     }
 
-    fun getDataFromIntent(intent: Intent) {
+    fun initialize(intent: Intent) {
         filePath = intent.getStringExtra(Constants.PATH_FILE_KEY)
+        computeTags()
+        setImageByGivenAPath()
+        populateExifProperties()
+        getAddressByTriggerRequest()
+    }
+
+    private fun computeTags() {
+        exifInterface = ExifInterface(filePath)
+        val map = exifInterface.getMap()
+        exifTagsContainerList = transformList(map)
+
+        latitude = map[Constants.EXIF_LATITUDE]?.toDouble()
+        longitude = map[Constants.EXIF_LONGITUDE]?.toDouble()
+    }
+
+    private fun populateExifProperties() {
+        view.setExifDataList(exifTagsContainerList)
+    }
+
+    private fun setImageByGivenAPath() {
         Log.d(this.javaClass.simpleName, filePath)
-
-        updateExifTagsContainerList()
-
         val imageUri = Uri.fromFile(File(filePath))
         val file = File(filePath)
         view.setImage(file.name, file.getSize(), imageUri)
-
-        view.setExifDataList(exifTagsContainerList)
-
-        getAddressByTriggerRequest()
     }
 
     private fun getAddressByTriggerRequest() {
@@ -97,15 +110,6 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         }
     }
 
-    private fun updateExifTagsContainerList() {
-        exifInterface = ExifInterface(filePath)
-        val map = exifInterface.getMap()
-        exifTagsContainerList = transformList(map)
-
-        latitude = map[Constants.EXIF_LATITUDE]?.toDouble()
-        longitude = map[Constants.EXIF_LONGITUDE]?.toDouble()
-    }
-
     private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
         val locationsList = arrayListOf<ExifField>()
         val datesList = arrayListOf<ExifField>()
@@ -114,19 +118,19 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         val othersList = arrayListOf<ExifField>()
 
         map.forEach {
-            when {
-                it.key == Constants.EXIF_LATITUDE
-                        || it.key == Constants.EXIF_LONGITUDE ->
+            when (it.key) {
+                Constants.EXIF_LATITUDE
+                    , Constants.EXIF_LONGITUDE ->
                     locationsList.add(ExifField(it.key, it.value))
-                it.key == ExifInterface.TAG_DATETIME
-                        || it.key == ExifInterface.TAG_GPS_DATESTAMP
-                        || it.key == ExifInterface.TAG_DATETIME_DIGITIZED ->
+                ExifInterface.TAG_DATETIME
+                    , ExifInterface.TAG_GPS_DATESTAMP
+                    , ExifInterface.TAG_DATETIME_DIGITIZED ->
                     datesList.add(ExifField(it.key, it.value))
-                it.key == ExifInterface.TAG_MAKE
-                        || it.key == ExifInterface.TAG_MODEL ->
+                ExifInterface.TAG_MAKE
+                    , ExifInterface.TAG_MODEL ->
                     cameraPropertiesList.add(ExifField(it.key, it.value))
-                it.key == ExifInterface.TAG_IMAGE_LENGTH
-                        || it.key == ExifInterface.TAG_IMAGE_WIDTH ->
+                ExifInterface.TAG_IMAGE_LENGTH
+                    , ExifInterface.TAG_IMAGE_WIDTH ->
                     dimensionsList.add(ExifField(it.key, it.value))
                 else -> othersList.add(ExifField(it.key, it.value))
             }
@@ -186,7 +190,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             }
             exifInterface.saveAttributes()
 
-            updateExifTagsContainerList()
+            computeTags()
             view.changeExifDataList(exifTagsContainerList)
 
             getAddressByTriggerRequest()
@@ -228,7 +232,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             }
             exifInterface.saveAttributes()
 
-            updateExifTagsContainerList()
+            computeTags()
             view.changeExifDataList(exifTagsContainerList)
 
             view.onCompleteDateChanged()

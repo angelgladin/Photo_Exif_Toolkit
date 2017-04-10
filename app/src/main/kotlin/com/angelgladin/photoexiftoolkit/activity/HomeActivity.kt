@@ -75,11 +75,11 @@ class HomeActivity : AppCompatActivity(), HomeView {
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>, token: PermissionToken) {
                         AlertDialog.Builder(this@HomeActivity).setTitle(R.string.app_name)
                                 .setMessage(R.string.permission_rationale_message)
-                                .setNegativeButton(android.R.string.cancel, { dialog, which ->
+                                .setNegativeButton(android.R.string.cancel, { dialog, _ ->
                                     dialog.dismiss()
                                     token.cancelPermissionRequest()
                                 })
-                                .setPositiveButton(android.R.string.ok, { dialog, which ->
+                                .setPositiveButton(android.R.string.ok, { dialog, _ ->
                                     dialog.dismiss()
                                     token.continuePermissionRequest()
                                 })
