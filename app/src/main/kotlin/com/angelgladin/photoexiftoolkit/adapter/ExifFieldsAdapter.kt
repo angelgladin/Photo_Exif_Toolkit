@@ -33,7 +33,8 @@ import kotlinx.android.synthetic.main.item_exif_data.view.*
 /**
  * Created on 12/22/16.
  */
-class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: PhotoDetailPresenter) : RecyclerView.Adapter<ExifFieldsAdapter.ViewHolder>() {
+class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: PhotoDetailPresenter)
+    : RecyclerView.Adapter<ExifFieldsAdapter.ViewHolder>() {
 
     val viewHolderReferenceList = mutableListOf<ViewHolder>()
 
