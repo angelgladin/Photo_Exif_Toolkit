@@ -36,7 +36,9 @@ import com.angelgladin.photoexiftoolkit.extension.*
 import com.angelgladin.photoexiftoolkit.interactor.PhotoDetailInteractor
 import com.angelgladin.photoexiftoolkit.util.Constants
 import com.angelgladin.photoexiftoolkit.view.PhotoDetailView
-import rx.Subscriber
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -77,22 +79,21 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         if (latitude != null && longitude != null) {
             view.showProgressDialog()
             PhotoDetailInteractor.getAddress(latitude!!, longitude!!)
-                    .subscribe(object : Subscriber<AddressResponse>() {
-                        override fun onError(e: Throwable) {
-                            Log.e(this.javaClass.simpleName, e.message)
-                            view.onError(view.getContext().resources.getString(R.string.getting_address_error), e)
+                    .enqueue(object : Callback<AddressResponse> {
+                        override fun onResponse(call: Call<AddressResponse>?, response: Response<AddressResponse>?) {
+                            val result = response!!.body()
+                            Log.d(this.javaClass.simpleName, result.resultList.first().formattedAddress)
+                            view.showAddressOnRecyclerViewItem(result.resultList.first().formattedAddress)
                             view.hideProgressDialog()
                         }
 
-                        override fun onNext(t: AddressResponse) {
-                            Log.d(this.javaClass.simpleName, t.resultList.first().formattedAddress)
-                            view.showAddressOnRecyclerViewItem(t.resultList.first().formattedAddress)
-                        }
-
-                        override fun onCompleted() {
+                        override fun onFailure(call: Call<AddressResponse>?, t: Throwable?) {
+                            Log.e(this.javaClass.simpleName, t!!.message)
+                            view.onError(view.getContext().resources.getString(R.string.getting_address_error), t)
                             view.hideProgressDialog()
                         }
                     })
+
         }
     }
 
