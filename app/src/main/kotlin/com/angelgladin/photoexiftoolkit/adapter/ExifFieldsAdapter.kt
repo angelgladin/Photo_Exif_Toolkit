@@ -66,7 +66,7 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
             text_properties.text = item.getOnStringProperties()
             itemView.setOnClickListener { presenter.onItemPressed(item) }
             when (item.type) {
-                Type.LOCATION_DATA -> {
+                Type.GPS -> {
                     image_type.setImageResource(R.drawable.ic_pin_drop_black_24dp)
                     text_type.text = resources.getString(R.string.item_location)
                 }

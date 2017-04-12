@@ -28,7 +28,7 @@ import java.util.*
  * Created on 12/22/16.
  */
 @Suppress("UNCHECKED_CAST")
-fun ExifInterface.getMap(): HashMap<String, String> {
+fun ExifInterface.getTags(): HashMap<String, String> {
     val mAttributesField = this.javaClass.getDeclaredField("mAttributes")
     mAttributesField.isAccessible = true
     val mAttributes = mAttributesField.get(this)
@@ -66,6 +66,6 @@ fun ExifInterface.convertDecimalToDegrees(decimal: Double): String {
 fun ExifInterface.getLatitudeRef(latitude: Double): String =
         if (latitude < 0.0) "S" else "N"
 
-fun ExifInterface.getLongitudeRef(latitude: Double): String =
-        if (latitude < 0.0) "W" else "E"
+fun ExifInterface.getLongitudeRef(longitude: Double): String =
+        if (longitude < 0.0) "W" else "E"
 

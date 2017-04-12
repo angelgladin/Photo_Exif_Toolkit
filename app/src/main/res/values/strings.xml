@@ -17,7 +17,7 @@
 
     <string name="share_menu_item">Share</string>
 
-    <string name="item_location">Location</string>
+    <string name="item_location">GPS</string>
     <string name="item_date">Date</string>
     <string name="item_camera_properties">Camera properties</string>
     <string name="item_dimension">Dimension</string>

@@ -128,7 +128,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         val alertDialogBuilder = AlertDialog.Builder(this)
 
         val optionsList = mutableListOf(resources.getString(R.string.alert_item_copy_to_clipboard))
-        if (item.type == Type.LOCATION_DATA)
+        if (item.type == Type.GPS)
             optionsList.add(resources.getString(R.string.alert_item_open_map))
         else if (item.type == Type.DATE)
             optionsList.add(resources.getString(R.string.alert_item_edit))
@@ -138,7 +138,7 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
             if (which == 0) {
                 presenter.copyDataToClipboard(item)
             } else if (which == 1) {
-                if (item.type == Type.LOCATION_DATA)
+                if (item.type == Type.GPS)
                     presenter.openDialogMap(item)
                 else if (item.type == Type.DATE)
                     presenter.editDate(item)
