@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Photo EXIF Toolkit</string>
+    <string name="app_name">Photo Exif Toolkit</string>
     <string name="action_settings">Settings</string>
 
     <string name="not_implemented_yet">Not implemented yet :p</string>
@@ -9,8 +9,8 @@
     <string name="about_developer">About the developer</string>
 
     <string name="photo_from_gallery">Photo From Gallery</string>
-    <string name="permission_rationale_message">These permissions are required for viewing EXIF data.</string>
-    <string name="photo_from_gallery_description">Choose an image from gallery for displaying all available EXIF data.</string>
+    <string name="permission_rationale_message">These permissions are required for viewing Exif tags.</string>
+    <string name="photo_from_gallery_description">Choose an image from gallery for displaying all available Exif tags.</string>
 
 
     <string name="progress_dialog_address_loading">Getting the address</string>
