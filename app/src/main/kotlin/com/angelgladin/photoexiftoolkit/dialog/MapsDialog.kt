@@ -100,6 +100,7 @@ class MapDialog : DialogFragment(), OnMapReadyCallback, GoogleMap.OnMapClickList
     override fun onDestroyView() {
         super.onDestroyView()
         dialogEvents.locationChanged(locationChanged, Location(location.latitude, location.longitude))
+        Log.d(this.javaClass.simpleName, "Location changed: $locationChanged, Location: $location")
 
         val f = fragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         if (f != null) fragmentManager.beginTransaction().remove(f).commit()

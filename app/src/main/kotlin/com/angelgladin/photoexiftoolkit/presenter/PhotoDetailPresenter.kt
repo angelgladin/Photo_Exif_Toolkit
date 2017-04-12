@@ -66,7 +66,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     private fun computeTags() {
         exifInterface = ExifInterface(filePath)
-        val map = exifInterface.getMap()
+        val map = exifInterface.getTags()
         exifTagsContainerList = transformList(map)
 
         latitude = map[Constants.EXIF_LATITUDE]?.toDouble()
@@ -95,7 +95,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                     },
                     onFailure = {
                         Log.e(this.javaClass.simpleName, it.message)
-                        view.onError(view.getContext().resources.getString(R.string.getting_address_error), it)
+                        view.onError(view.getContext().resources.getString(R.string.getting_address_error))
                         view.hideProgressDialog()
                     })
 
@@ -104,18 +104,17 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
 
     private fun transformList(map: MutableMap<String, String>): List<ExifTagsContainer> {
         val locationsList = arrayListOf<ExifField>()
+        val gpsList = arrayListOf<ExifField>()
         val datesList = arrayListOf<ExifField>()
         val cameraPropertiesList = arrayListOf<ExifField>()
         val dimensionsList = arrayListOf<ExifField>()
         val othersList = arrayListOf<ExifField>()
-
         map.forEach {
             when (it.key) {
                 Constants.EXIF_LATITUDE
                     , Constants.EXIF_LONGITUDE ->
                     locationsList.add(ExifField(it.key, it.value))
                 ExifInterface.TAG_DATETIME
-                    , ExifInterface.TAG_GPS_DATESTAMP
                     , ExifInterface.TAG_DATETIME_DIGITIZED ->
                     datesList.add(ExifField(it.key, it.value))
                 ExifInterface.TAG_MAKE
@@ -124,10 +123,14 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                 ExifInterface.TAG_IMAGE_LENGTH
                     , ExifInterface.TAG_IMAGE_WIDTH ->
                     dimensionsList.add(ExifField(it.key, it.value))
-                else -> othersList.add(ExifField(it.key, it.value))
+                else -> {
+                    if (it.key.contains("GPS")) gpsList.add(ExifField(it.key, it.value))
+                    else othersList.add(ExifField(it.key, it.value))
+                }
             }
         }
-        return arrayListOf(ExifTagsContainer(locationsList, Type.LOCATION_DATA),
+        locationsList.addAll(gpsList)
+        return arrayListOf(ExifTagsContainer(locationsList, Type.GPS),
                 ExifTagsContainer(datesList, Type.DATE),
                 ExifTagsContainer(cameraPropertiesList, Type.CAMERA_PROPERTIES),
                 ExifTagsContainer(dimensionsList, Type.DIMENSION),
@@ -188,7 +191,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             getAddressByTriggerRequest()
             view.onCompleteLocationChanged()
         } catch (e: IOException) {
-            view.onError(view.getContext().resources.getString(R.string.location_changed_message_error), e)
+            view.onError(view.getContext().resources.getString(R.string.location_changed_message_error))
         }
     }
 
@@ -228,8 +231,10 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             view.changeExifDataList(exifTagsContainerList)
 
             view.onCompleteDateChanged()
+            Log.d(this.javaClass.simpleName, "Date was changed: year: $year  month: $month day: $dayOfMonth")
         } catch (e: IOException) {
-            view.onError(view.getContext().resources.getString(R.string.date_changed_message_error), e)
+            Log.e(this.javaClass.simpleName, "${e.cause} - ${e.message}")
+            view.onError(view.getContext().resources.getString(R.string.date_changed_message_error))
         }
     }
 

@@ -41,5 +41,5 @@ interface PhotoDetailView : BaseView {
     fun shareData(data: String)
     fun onCompleteLocationChanged()
     fun onCompleteDateChanged()
-    fun onError(message: String, t: Throwable)
+    fun onError(message: String)
 }

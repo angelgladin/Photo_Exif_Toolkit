@@ -34,4 +34,4 @@ data class ExifTagsContainer(val list: List<ExifField>, val type: Type) {
     }
 }
 
-enum class Type { LOCATION_DATA, DATE, CAMERA_PROPERTIES, DIMENSION, OTHER }
+enum class Type { GPS, DATE, CAMERA_PROPERTIES, DIMENSION, OTHER }

@@ -128,17 +128,17 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         val alertDialogBuilder = AlertDialog.Builder(this)
 
         val optionsList = mutableListOf(resources.getString(R.string.alert_item_copy_to_clipboard))
-        if (item.type == Type.LOCATION_DATA)
+        if (item.type == Type.GPS)
             optionsList.add(resources.getString(R.string.alert_item_open_map))
         else if (item.type == Type.DATE)
             optionsList.add(resources.getString(R.string.alert_item_edit))
 
         alertDialogBuilder.setTitle(resources.getString(R.string.alert_select_an_action))
-        alertDialogBuilder.setItems(optionsList.toTypedArray(), { dialog, which ->
+        alertDialogBuilder.setItems(optionsList.toTypedArray(), { _, which ->
             if (which == 0) {
                 presenter.copyDataToClipboard(item)
             } else if (which == 1) {
-                if (item.type == Type.LOCATION_DATA)
+                if (item.type == Type.GPS)
                     presenter.openDialogMap(item)
                 else if (item.type == Type.DATE)
                     presenter.editDate(item)
@@ -183,19 +183,16 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         coordinator_layout.showSnackbar(R.string.date_changed_message)
     }
 
-    override fun onError(message: String, t: Throwable) {
-        Log.e(this.javaClass.simpleName, "${t.cause} - ${t.message}")
+    override fun onError(message: String) {
         coordinator_layout.showSnackbar(message)
     }
 
     override fun locationChanged(locationChanged: Boolean, location: Location) {
-        Log.d(this.javaClass.simpleName, "Location changed: $locationChanged, Location: $location")
         if (locationChanged)
             presenter.changeExifLocation(location)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        Log.d(this.javaClass.simpleName, "Date was changed: year: $year  month: $month day: $dayOfMonth")
         presenter.changeExifDate(year, month, dayOfMonth)
     }
 
