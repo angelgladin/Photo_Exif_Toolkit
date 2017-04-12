@@ -95,7 +95,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
                     },
                     onFailure = {
                         Log.e(this.javaClass.simpleName, it.message)
-                        view.onError(view.getContext().resources.getString(R.string.getting_address_error), it)
+                        view.onError(view.getContext().resources.getString(R.string.getting_address_error))
                         view.hideProgressDialog()
                     })
 
@@ -188,7 +188,7 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             getAddressByTriggerRequest()
             view.onCompleteLocationChanged()
         } catch (e: IOException) {
-            view.onError(view.getContext().resources.getString(R.string.location_changed_message_error), e)
+            view.onError(view.getContext().resources.getString(R.string.location_changed_message_error))
         }
     }
 
@@ -228,8 +228,10 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
             view.changeExifDataList(exifTagsContainerList)
 
             view.onCompleteDateChanged()
+            Log.d(this.javaClass.simpleName, "Date was changed: year: $year  month: $month day: $dayOfMonth")
         } catch (e: IOException) {
-            view.onError(view.getContext().resources.getString(R.string.date_changed_message_error), e)
+            Log.e(this.javaClass.simpleName, "${e.cause} - ${e.message}")
+            view.onError(view.getContext().resources.getString(R.string.date_changed_message_error))
         }
     }
 
