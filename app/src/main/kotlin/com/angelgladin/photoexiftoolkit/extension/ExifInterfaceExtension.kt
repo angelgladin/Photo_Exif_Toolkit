@@ -18,6 +18,8 @@
  */
 
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.angelgladin.photoexiftoolkit.extension
 
 import android.media.ExifInterface
@@ -34,7 +36,6 @@ private fun ExifInterface.mAttributes(): Any {
 /**
  * Created on 12/22/16.
  */
-@Suppress("UNCHECKED_CAST")
 fun ExifInterface.getTags(): HashMap<String, String> {
     val mAttributes = mAttributes()
 
