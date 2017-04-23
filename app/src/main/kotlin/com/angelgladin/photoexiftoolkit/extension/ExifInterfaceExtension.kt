@@ -51,6 +51,53 @@ fun ExifInterface.getTags(): HashMap<String, String> {
     return map
 }
 
+/**
+ * Ok, this is very tricky
+ */
+fun ExifInterface.removeTag() {
+    val s = java.lang.String::class.java
+    //val removeAttributeMethod = this.javaClass.getDeclaredMethod("removeAttribute", s)
+    //removeAttributeMethod.isAccessible = true
+    //removeAttributeMethod.invoke(this, "Make")
+    /*
+    val removeAttributeMethod = this.javaClass.declaredMethods
+    for (x in removeAttributeMethod){
+        System.out.println(x.name)
+    }
+    System.out.println(removeAttributeMethod)
+    */
+    //this.getTags().keys.forEach {
+    //    if (it != Constants.EXIF_LATITUDE || it != Constants.EXIF_LATITUDE)
+    //        System.out.println(it)
+    //}
+
+    //this.setAttribute("GPSLongitude","")
+    //this.saveAttributes()
+
+    val mAttributesField = this.javaClass.getDeclaredField("mAttributes")
+    mAttributesField.isAccessible = true
+    val mAttributes = mAttributesField.get(this)
+    //if op== 1 only remove gps data, if op == 2 remove all
+    val op = 2
+    if (mAttributes is Array<*>) {
+        if (op == 2) {
+            val arrayOfMapAux = mAttributes as Array<HashMap<String, *>>
+            arrayOfMapAux.forEach { map ->
+                map.keys.filter { it.contains("GPS") }
+                        .forEach { key -> map.remove(key) }
+            }
+            this.saveAttributes()
+        }
+
+    } else if (mAttributes is HashMap<*, *>) {
+        val m = mAttributes as HashMap<String, String>
+        //m.keys.filter { it.contains("GPS") }
+        //        .forEach { m.remove(it) }
+        //m.clear()
+        //this.saveAttributes()
+    }
+}
+
 fun ExifInterface.convertDecimalToDegrees(decimal: Double): String {
     var latitude = Math.abs(decimal)
     val degree = latitude.toInt()
