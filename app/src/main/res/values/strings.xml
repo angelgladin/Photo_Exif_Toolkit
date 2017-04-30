@@ -16,6 +16,7 @@
     <string name="progress_dialog_address_loading">Getting the address</string>
 
     <string name="share_menu_item">Share</string>
+    <string name="remove_tags_item">Remove Exif tags</string>
 
     <string name="item_location">GPS</string>
     <string name="item_date">Date</string>
@@ -27,6 +28,7 @@
     <string name="alert_item_copy_to_clipboard">Copy to clipboard</string>
     <string name="alert_item_edit">Edit</string>
     <string name="alert_item_open_map">Open map</string>
+    <string name="alert_item_remove_gps_tags">Remove GPS data</string>
 
     <string name="text_copied_to_clipboard_message">Text successfully copied to clipboard</string>
     <string name="location_changed_message">Location was successfully changed</string>
@@ -41,8 +43,16 @@
 
     <string name="dialog_maps_title">Location</string>
     <string name="dialog_maps_title_edit_location">Edit location</string>
-    <string name="dialog_maps_title_tap_for_new_location">Tap for new location</string>
+    <string name="dialog_maps_title_tap_for_new_location">Tap the new location</string>
+
+    <string name="dialog_remove_tags_question">Are you sure you want to remove all tags?</string>
+    <string name="dialog_remove_gps_tags_question">Are you sure you want to remove GPS tags?</string>
+    <string name="dialog_remove_tags_caveat">This operation cannot be undone</string>
+
+    <string name="tags_deleted_successfully">Tags deleted successfully</string>
+    <string name="all_tags_deleted_successfully">All tags were deleted successfully</string>
 
     <string name="dialog_maps_title_edit_location_message">Are you sure you want to set this new location?</string>
 
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

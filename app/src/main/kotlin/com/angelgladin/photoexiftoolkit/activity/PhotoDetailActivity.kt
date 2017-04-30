@@ -28,10 +28,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
@@ -87,6 +87,15 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
             presenter.shareData()
             true
         }
+        R.id.action_remove_tags -> {
+            showAlertDialog(title = R.string.dialog_remove_tags_question,
+                    message = R.string.dialog_remove_tags_caveat,
+                    positiveButtonAction = {
+                        presenter.removeAllTags()
+                    },
+                    negativeButtonAction = {})
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -112,6 +121,10 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         recyclerViewAdapter.setAddress(address)
     }
 
+    override fun hideAddressOnRecyclerViewItem() {
+        recyclerViewAdapter.hideAddress()
+    }
+
     override fun showProgressDialog() {
         progressDialog.show()
     }
@@ -127,12 +140,15 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
     override fun showAlertDialogWhenItemIsPressed(item: ExifTagsContainer) {
         val alertDialogBuilder = AlertDialog.Builder(this)
 
-        val optionsList = mutableListOf(resources.getString(R.string.alert_item_copy_to_clipboard))
-        if (item.type == Type.GPS)
+        val optionsList = mutableListOf<String>()
+        //Add menu options to the alert dialog, the first one is in every item.
+        optionsList.add(resources.getString(R.string.alert_item_copy_to_clipboard))
+        if (item.type == Type.GPS) {
             optionsList.add(resources.getString(R.string.alert_item_open_map))
-        else if (item.type == Type.DATE)
+            optionsList.add(resources.getString(R.string.alert_item_remove_gps_tags))
+        } else if (item.type == Type.DATE) {
             optionsList.add(resources.getString(R.string.alert_item_edit))
-
+        }
         alertDialogBuilder.setTitle(resources.getString(R.string.alert_select_an_action))
         alertDialogBuilder.setItems(optionsList.toTypedArray(), { _, which ->
             if (which == 0) {
@@ -142,6 +158,13 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
                     presenter.openDialogMap(item)
                 else if (item.type == Type.DATE)
                     presenter.editDate(item)
+            } else if (which == 2 && item.type == Type.GPS) {
+                showAlertDialog(title = R.string.dialog_remove_gps_tags_question,
+                        message = R.string.dialog_remove_tags_caveat,
+                        positiveButtonAction = {
+                            presenter.removeTags(item.list.map { it.tag }.toSet())
+                        },
+                        negativeButtonAction = {})
             }
         })
         val dialog = alertDialogBuilder.create()
@@ -187,6 +210,10 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         coordinator_layout.showSnackbar(message)
     }
 
+    override fun onSuccessTagsDeleted(message: String) {
+        coordinator_layout.showSnackbar(message)
+    }
+
     override fun locationChanged(locationChanged: Boolean, location: Location) {
         if (locationChanged)
             presenter.changeExifLocation(location)
@@ -196,4 +223,23 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         presenter.changeExifDate(year, month, dayOfMonth)
     }
 
+    inline private fun showAlertDialog(@StringRes title: Int,
+                                       @StringRes message: Int,
+                                       crossinline positiveButtonAction: () -> Unit,
+                                       crossinline negativeButtonAction: () -> Unit) {
+        AlertDialog.Builder(this)
+                .setTitle(resources.getString(title))
+                .setMessage(resources.getString(message))
+                .setPositiveButton(resources.getString(android.R.string.ok),
+                        { dialog, _ ->
+                            positiveButtonAction()
+                            dialog.dismiss()
+                        })
+                .setNegativeButton(resources.getString(android.R.string.cancel),
+                        { dialog, _ ->
+                            negativeButtonAction()
+                            dialog.dismiss()
+                        })
+                .show()
+    }
 }
