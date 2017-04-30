@@ -29,9 +29,10 @@ The app follows MVP pattern. For more details read this [post](https://antoniole
 ## To do
 
 * Testing
-* Remove all Exif tags.
-* Remove or add only one Exif tag.
-
+* Removing only one tag and create a menu for that
+* Refactor and clean code
+* Add about the app and developer Dialog.
+* Publish the app in the Play Store
 
 ## Developed by
 
