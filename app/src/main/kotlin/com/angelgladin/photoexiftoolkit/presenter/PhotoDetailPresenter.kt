@@ -247,12 +247,29 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
     }
 
     fun removeAllTags() {
-        exifInterface.removeAllTags()
+        exifInterface.removeAllTags(
+                onSuccess = {
+                    refreshTags()
+                    view.hideAddressOnRecyclerViewItem()
+                    view.onSuccessTagsDeleted(view.getContext().getString(R.string.all_tags_deleted_successfully))
+                },
+                onFailure = { view.onError(view.getContext().getString(R.string.something_went_wrong)) })
     }
 
     fun removeTags(tags: Set<String>) {
         if (tags.isNotEmpty())
-            exifInterface.removeTags(tags)
+            exifInterface.removeTags(tags,
+                    onSuccess = {
+                        refreshTags()
+                        view.hideAddressOnRecyclerViewItem()
+                        view.onSuccessTagsDeleted(view.getContext().getString(R.string.tags_deleted_successfully))
+                    },
+                    onFailure = { view.onError(view.getContext().getString(R.string.something_went_wrong)) })
+    }
+
+    private fun refreshTags() {
+        computeTags()
+        view.changeExifDataList(exifTagsContainerList)
     }
 
 }

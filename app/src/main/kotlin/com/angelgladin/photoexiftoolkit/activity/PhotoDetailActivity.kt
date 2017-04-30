@@ -121,6 +121,10 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
         recyclerViewAdapter.setAddress(address)
     }
 
+    override fun hideAddressOnRecyclerViewItem() {
+        recyclerViewAdapter.hideAddress()
+    }
+
     override fun showProgressDialog() {
         progressDialog.show()
     }
@@ -203,6 +207,10 @@ class PhotoDetailActivity : AppCompatActivity(), PhotoDetailView, DatePickerDial
     }
 
     override fun onError(message: String) {
+        coordinator_layout.showSnackbar(message)
+    }
+
+    override fun onSuccessTagsDeleted(message: String) {
         coordinator_layout.showSnackbar(message)
     }
 

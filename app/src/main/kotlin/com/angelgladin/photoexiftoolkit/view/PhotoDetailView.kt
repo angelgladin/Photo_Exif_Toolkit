@@ -31,6 +31,7 @@ interface PhotoDetailView : BaseView {
     fun setImage(fileName: String, fileSize: String, imageUri: Uri)
     fun setExifDataList(list: List<ExifTagsContainer>)
     fun showAddressOnRecyclerViewItem(address: String)
+    fun hideAddressOnRecyclerViewItem()
     fun showProgressDialog()
     fun hideProgressDialog()
     fun changeExifDataList(list: List<ExifTagsContainer>)
@@ -41,5 +42,6 @@ interface PhotoDetailView : BaseView {
     fun shareData(data: String)
     fun onCompleteLocationChanged()
     fun onCompleteDateChanged()
+    fun onSuccessTagsDeleted(message: String)
     fun onError(message: String)
 }

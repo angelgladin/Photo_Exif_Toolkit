@@ -24,6 +24,7 @@ package com.angelgladin.photoexiftoolkit.extension
 
 import android.media.ExifInterface
 import com.angelgladin.photoexiftoolkit.util.Constants
+import java.io.IOException
 import java.util.*
 
 //TODO: catch exceptions
@@ -57,39 +58,52 @@ fun ExifInterface.getTags(): HashMap<String, String> {
     return map
 }
 
-fun ExifInterface.removeAllTags() {
-    val mAttributes = mAttributes()
+fun ExifInterface.removeAllTags(onSuccess: () -> Unit,
+                                onFailure: (Throwable) -> Unit) {
+    try {
+        val mAttributes = mAttributes()
 
-    if (mAttributes is Array<*>) {
-        val arrayOfMapAux = mAttributes as Array<HashMap<String, *>>
-        arrayOfMapAux.forEach { map -> map.clear() }
+        if (mAttributes is Array<*>) {
+            val arrayOfMapAux = mAttributes as Array<HashMap<String, *>>
+            arrayOfMapAux.forEach { map -> map.clear() }
 
-    } else if (mAttributes is HashMap<*, *>) {
-        val map = mAttributes as HashMap<String, String>
-        map.clear()
+        } else if (mAttributes is HashMap<*, *>) {
+            val map = mAttributes as HashMap<String, String>
+            map.clear()
+        }
+        this.saveAttributes()
+        onSuccess()
+    } catch (e: IOException) {
+        onFailure(e)
     }
-    this.saveAttributes()
 }
 
 /**
  * Ok, this is very tricky
  */
-fun ExifInterface.removeTags(tags: Set<String>) {
-    val mAttributes = mAttributes()
+fun ExifInterface.removeTags(tags: Set<String>,
+                             onSuccess: () -> Unit,
+                             onFailure: (Throwable) -> Unit) {
+    try {
+        val mAttributes = mAttributes()
 
-    if (mAttributes is Array<*>) {
-        val arrayOfMapAux = mAttributes as Array<HashMap<String, *>>
-        arrayOfMapAux.forEach { map ->
+        if (mAttributes is Array<*>) {
+            val arrayOfMapAux = mAttributes as Array<HashMap<String, *>>
+            arrayOfMapAux.forEach { map ->
+                map.keys.filter { it in tags }
+                        .forEach { key -> map.remove(key) }
+            }
+
+        } else if (mAttributes is HashMap<*, *>) {
+            val map = mAttributes as HashMap<String, String>
             map.keys.filter { it in tags }
-                    .forEach { key -> map.remove(key) }
+                    .forEach { map.remove(it) }
         }
-
-    } else if (mAttributes is HashMap<*, *>) {
-        val map = mAttributes as HashMap<String, String>
-        map.keys.filter { it in tags }
-                .forEach { map.remove(it) }
+        this.saveAttributes()
+        onSuccess()
+    } catch (e: IOException) {
+        onFailure(e)
     }
-    this.saveAttributes()
 }
 
 fun ExifInterface.convertDecimalToDegrees(decimal: Double): String {
