@@ -55,10 +55,15 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
         notifyDataSetChanged()
     }
 
-    fun setAddress(address: String) {
-        viewHolderReferenceList[0].setAddress(address)
+    fun setAddress(address: String) = with(viewHolderReferenceList[0].itemView) {
+        text_address.visibility = View.VISIBLE
+        text_address.text = address
     }
 
+    fun hideAddress() = with(viewHolderReferenceList[0].itemView) {
+        text_address.visibility = View.GONE
+        text_address.text = ""
+    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -89,10 +94,6 @@ class ExifFieldsAdapter(var exifList: List<ExifTagsContainer>, val presenter: Ph
             }
         }
 
-        fun setAddress(address: String) {
-            itemView.text_address.visibility = View.VISIBLE
-            itemView.text_address.text = address
-        }
     }
 
 }
