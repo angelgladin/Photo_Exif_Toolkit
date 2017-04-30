@@ -245,4 +245,14 @@ class PhotoDetailPresenter(override val view: PhotoDetailView) : BasePresenter<B
         else
             return s
     }
+
+    fun removeAllTags() {
+        exifInterface.removeAllTags()
+    }
+
+    fun removeTags(tags: Set<String>) {
+        if (tags.isNotEmpty())
+            exifInterface.removeTags(tags)
+    }
+
 }
