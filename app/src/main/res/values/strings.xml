@@ -16,6 +16,7 @@
     <string name="progress_dialog_address_loading">Getting the address</string>
 
     <string name="share_menu_item">Share</string>
+    <string name="remove_tags_item">Remove Exif tags</string>
 
     <string name="item_location">GPS</string>
     <string name="item_date">Date</string>
