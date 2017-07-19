@@ -29,7 +29,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.angelgladin.photoexiftoolkit.R
-import com.angelgladin.photoexiftoolkit.extension.getPathFromUri
 import com.angelgladin.photoexiftoolkit.extension.showSnackbar
 import com.angelgladin.photoexiftoolkit.presenter.HomePresenter
 import com.angelgladin.photoexiftoolkit.util.Constants
@@ -95,7 +94,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.data != null) {
             val selectedImage = data.data
-            val pathFile = selectedImage.getPathFromUri(this)
+            val pathFile = selectedImage.encodedPath
 
             presenter.launchPhotoDetailActivity(pathFile)
         }
